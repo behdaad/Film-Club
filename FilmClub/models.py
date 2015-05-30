@@ -1,13 +1,14 @@
 import datetime
 
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 
 class Movie(models.Model):
     name = models.CharField(max_length=127)
-    description = models.CharField(max_length=511)
+    description = models.TextField()
     director = models.CharField(max_length=127)
     writer = models.CharField(max_length=127)
     actor1 = models.CharField(max_length=127)
@@ -22,16 +23,16 @@ class Post(models.Model):
     date = models.DateTimeField()
     rating = models.IntegerField()
     movie = models.ForeignKey(Movie)
-    review = models.CharField(max_length=16383)
+    review = models.TextField()
 
 
 class Like(models.Model):
     user = models.ForeignKey(User)
     post = models.ForeignKey(Post)
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=datetime.datetime.now)
 
 
 class Comment(models.Model):
     user = models.ForeignKey(User)
     post = models.ForeignKey(Post)
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=datetime.datetime.now)
