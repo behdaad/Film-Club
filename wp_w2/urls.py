@@ -18,13 +18,13 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', 'FilmClub.views.main'),
+    url(r'^$', 'FilmClub.views.main'),
     url(r'^register/', 'FilmClub.views.register'),
-    url(r'^', 'FilmClub.views.'),
-    url(r'^', 'FilmClub.views.'),
-    url(r'^', 'FilmClub.views.'),
-    url(r'^', 'FilmClub.views.'),
-    url(r'^', 'FilmClub.views.'),
+    # url(r'^', 'FilmClub.views.'),
+    # url(r'^', 'FilmClub.views.'),
+    # url(r'^', 'FilmClub.views.'),
+    # url(r'^', 'FilmClub.views.'),
+    # url(r'^', 'FilmClub.views.'),
 
 ]
 

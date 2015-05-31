@@ -6,17 +6,24 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+class Person(models.Model):
+    name = models.CharField(max_length=127)
+
+    def __str__(self):
+        return self.name
+
+
 class Movie(models.Model):
     name = models.CharField(max_length=127)
     description = models.TextField()
     genre = models.CharField(max_length=127)
-    director = models.CharField(max_length=127)
-    writer = models.CharField(max_length=127)
-    actor1 = models.CharField(max_length=127)
-    actor2 = models.CharField(max_length=127)
-    actor3 = models.CharField(max_length=127)
+    director = models.ForeignKey(Person, related_name="director")
+    writer = models.ForeignKey(Person, related_name="writer")
+    actor1 = models.ForeignKey(Person, related_name="actor1")
+    actor2 = models.ForeignKey(Person, related_name="actor2")
     runningMinutes = models.IntegerField()
     releaseDate = models.DateField()
+    poster = models.CharField(max_length=127)
 
     def __str__(self):
         return self.name
