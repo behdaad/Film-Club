@@ -1,0 +1,25 @@
+.bordered
+{
+	border: 1px solid black;
+}
+
+.bold
+{
+	font-weight: bold;
+}
+
+.date
+{
+	float: none;
+	font-weight: 400;
+	font-size: .875em;
+	font-style: normal;
+	padding: 0;
+	color: rgba(0,0,0,.4);
+}
+
+.likeButton
+{
+	width: 105px;
+	/*text-align: left;*/
+}

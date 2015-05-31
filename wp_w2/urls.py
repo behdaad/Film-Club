@@ -18,4 +18,14 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', 'FilmClub.views.main'),
+    url(r'^register/', 'FilmClub.views.register'),
+    url(r'^', 'FilmClub.views.'),
+    url(r'^', 'FilmClub.views.'),
+    url(r'^', 'FilmClub.views.'),
+    url(r'^', 'FilmClub.views.'),
+    url(r'^', 'FilmClub.views.'),
+
 ]
+
+# url(r'^blog/(?P<blog_id>\d+)/comment/$', 'blog.views.blog_comment'),
