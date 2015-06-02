@@ -19,33 +19,42 @@
                     <li>The second rule of Film Club is: You do talk about Film Club.</li>
                 </ul>
             </div>
+
+            {% if error %}
             <div class="ui negative message vertically padded">
                 <div class="header">
                     Sign-in unsuccessful
                 </div>
                 The username/password you provided is not registered.
             </div>
+            {% endif %}
+
+            {% if sign_up %}
             <div class="ui positive message vertically padded">
                 <div class="header">
                     Sign-up complete
                 </div>
                 Please check your email. We've sent you an activation email.
             </div>
+            {% endif %}
+
+            {% if forgot %}
             <div class="ui positive message">
                 <div class="header">
                     Success
                 </div>
                 A new password was sent to your email. Please follow the instructions sent to you.
             </div>
-            <!-- </div> -->
+            {% endif %}
 
             <!-- login form -->
-            <form class="ui form segment" action="timeline.html" method="post" id="loginForm">
+            <form class="ui form segment" action="/login/" method="post" id="loginForm">
+                {% csrf_token %}
                 <div class="ui error message"></div>
                 <div class="left icon field">
                     <label>Username</label>
                     <div class="ui left icon input">
-                        <input placeholder="Username" name="username" type="text">
+                        <input placeholder="Username" type="text" name="username">
                         <i class="ui user icon"></i>
                     </div>
                 </div>
@@ -56,16 +65,14 @@
                         <i class="ui lock icon"></i>
                     </div>
                 </div>
-                <a href="timeline.html">
-                    <div class="ui blue submit button">Login</div>
-                </a>
+                <div class="ui blue submit button">Login</div>
                 <a href="#" id="forgotPasswordLink">Forgot Password?</a>
             </form>
             <!-- login form end -->
 
             <div class="ui horizontal divider">Or</div>
             <div class="center aligned column"> <!-- edit: removed centered row -->
-                <a class="ui link" href="register">
+                <a class="ui link" href="/register/">
                     <div class="large green ui labeled icon button">
                         <i class="signup icon"></i>
                         Sign Up

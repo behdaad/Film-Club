@@ -4,12 +4,82 @@
     <database-info product="SQLite" version="3.8.7" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
+    <table name="FilmClub_comment" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="post_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="user_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="date" sqlType="DATETIME" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_FilmClub_comment_1" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_FilmClub_comment_2" columns="post_id" ref-table="FilmClub_post" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+    </table>
+    <table name="FilmClub_extendeduser" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="displayName" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="birthday" sqlType="DATE" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="isMale" sqlType="BLOB" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="user_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_FilmClub_extendeduser_1" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <exported-key name="#FAKE_FilmClub_extendeduser_following_1" table="FilmClub_extendeduser_following" schema="" catalog="" columns="to_extendeduser_id"/>
+      <exported-key name="#FAKE_FilmClub_extendeduser_following_2" table="FilmClub_extendeduser_following" schema="" catalog="" columns="from_extendeduser_id"/>
+    </table>
+    <table name="FilmClub_extendeduser_following" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="from_extendeduser_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="to_extendeduser_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_FilmClub_extendeduser_following_1" columns="to_extendeduser_id" ref-table="FilmClub_extendeduser" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_FilmClub_extendeduser_following_2" columns="from_extendeduser_id" ref-table="FilmClub_extendeduser" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+    </table>
+    <table name="FilmClub_like" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="post_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="user_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="date" sqlType="DATETIME" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_FilmClub_like_1" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_FilmClub_like_2" columns="post_id" ref-table="FilmClub_post" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+    </table>
     <table name="FilmClub_movie" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="name" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="description" sqlType="VARCHAR(511)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="director" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="description" sqlType="TEXT" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="director_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="actor1_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="actor2_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="releaseDate" sqlType="DATE" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="runningMinutes" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="genre" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="writer_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
+      <foreign-key name="#FAKE_FilmClub_movie_1" columns="writer_id" ref-table="FilmClub_person" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_FilmClub_movie_2" columns="actor2_id" ref-table="FilmClub_person" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_FilmClub_movie_3" columns="actor1_id" ref-table="FilmClub_person" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_FilmClub_movie_4" columns="director_id" ref-table="FilmClub_person" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <exported-key name="#FAKE_FilmClub_post_1" table="FilmClub_post" schema="" catalog="" columns="movie_id"/>
+    </table>
+    <table name="FilmClub_person" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="name" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <exported-key name="#FAKE_FilmClub_movie_1" table="FilmClub_movie" schema="" catalog="" columns="writer_id"/>
+      <exported-key name="#FAKE_FilmClub_movie_2" table="FilmClub_movie" schema="" catalog="" columns="actor2_id"/>
+      <exported-key name="#FAKE_FilmClub_movie_3" table="FilmClub_movie" schema="" catalog="" columns="actor1_id"/>
+      <exported-key name="#FAKE_FilmClub_movie_4" table="FilmClub_movie" schema="" catalog="" columns="director_id"/>
+    </table>
+    <table name="FilmClub_post" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="date" sqlType="DATETIME" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="rating" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="author_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="movie_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="review" sqlType="TEXT" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_FilmClub_post_1" columns="movie_id" ref-table="FilmClub_movie" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_FilmClub_post_2" columns="author_id" ref-table="auth_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <exported-key name="#FAKE_FilmClub_comment_2" table="FilmClub_comment" schema="" catalog="" columns="post_id"/>
+      <exported-key name="#FAKE_FilmClub_like_2" table="FilmClub_like" schema="" catalog="" columns="post_id"/>
     </table>
     <table name="auth_group" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
@@ -49,6 +119,10 @@
       <column name="date_joined" sqlType="DATETIME" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="last_login" sqlType="DATETIME" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
       <primary-key columns="id"/>
+      <exported-key name="#FAKE_FilmClub_comment_1" table="FilmClub_comment" schema="" catalog="" columns="user_id"/>
+      <exported-key name="#FAKE_FilmClub_extendeduser_1" table="FilmClub_extendeduser" schema="" catalog="" columns="user_id"/>
+      <exported-key name="#FAKE_FilmClub_like_1" table="FilmClub_like" schema="" catalog="" columns="user_id"/>
+      <exported-key name="#FAKE_FilmClub_post_2" table="FilmClub_post" schema="" catalog="" columns="author_id"/>
       <exported-key name="#FAKE_auth_user_groups_2" table="auth_user_groups" schema="" catalog="" columns="user_id"/>
       <exported-key name="#FAKE_auth_user_user_permissions_2" table="auth_user_user_permissions" schema="" catalog="" columns="user_id"/>
       <exported-key name="#FAKE_django_admin_log_1" table="django_admin_log" schema="" catalog="" columns="user_id"/>
