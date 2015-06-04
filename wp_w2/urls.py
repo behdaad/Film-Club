@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^$', 'FilmClub.views.main'),
     url(r'^register/', 'FilmClub.views.register'),
     url(r'^login/', 'FilmClub.views.sign_in'),
-    # url(r'^', 'FilmClub.views.'),
+    url(r'^logout/', 'FilmClub.views.logout_user'),
     # url(r'^', 'FilmClub.views.'),
     # url(r'^', 'FilmClub.views.'),
     # url(r'^', 'FilmClub.views.'),

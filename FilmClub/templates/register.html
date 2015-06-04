@@ -10,8 +10,11 @@
             <div class="seven wide column vertically padded">
                 <!-- sign up form -->
                 <div class="ui small right aligned">
-                    <form class="ui form segment" action="login.html" method="post" id="registerForm">
-                        <div class="ui error message"></div>
+                    <form class="ui form segment" action="" method="post" id="registerForm">
+                        {% csrf_token %}
+                        {{ form1 }}
+                        {{ form2 }}
+                        <!-- <div class="ui error message"></div>
                         <div class="two fields">
                             <div class="field">
                                 <label>First Name</label>
@@ -87,7 +90,7 @@
                         <div class="green ui labeled icon submit button">
                             <i class="signup icon"></i>
                             Sign Up
-                        </div>
+                        </div> -->
                     </form>
                 </div>
                 <!-- sign up form end -->
@@ -96,7 +99,7 @@
                 <div class="center aligned column">
                     <span class="text">
                         Already registered?
-                        <a class="ui link" href="login.html">Login</a>
+                        <a class="ui link" href="/">Login</a>
                     </span>
                 </div>
             </div> <!-- six wide column sign in form -->

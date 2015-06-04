@@ -23,7 +23,7 @@ class Movie(models.Model):
     actor2 = models.ForeignKey(Person, related_name="actor2")
     runningMinutes = models.IntegerField()
     releaseDate = models.DateField()
-    poster = models.CharField(max_length=127)
+    poster = models.CharField(max_length=127)  # including the extension
 
     def __str__(self):
         return self.name
@@ -62,7 +62,7 @@ class ExtendedUser(models.Model):
     user = models.OneToOneField(User)
     displayName = models.CharField(max_length=127)
     birthday = models.DateField()
-    isMale = models.BinaryField()
+    gender = models.CharField(max_length=10)
     following = models.ManyToManyField('self', symmetrical=False, blank=True)
 
     def __str__(self):

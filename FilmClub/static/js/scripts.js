@@ -7,7 +7,7 @@
 $('.ui.dropdown').dropdown();
 
 $('#registerForm')
-    .form({
+    .form(/*{
         firstName: {
             identifier : 'firstName',
             rules: [
@@ -97,8 +97,9 @@ $('#registerForm')
                 }
             ]
         }
-    })
+    }*/)
 ;
+
 
 /* end register.html JS */
 
