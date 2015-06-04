@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate, login, logout
 def suggested_movies(user):
     #  update ratings of movies to suggest
     #  don't forget .save()
+    #  also, should check if user has already written a review for the movie
     size = len(Movie.objects.all())
     randoms = [0, 0, 0]
     randoms[0] = random.randint(0, size - 1)
@@ -32,7 +33,37 @@ def suggested_movies(user):
     return [all_movies[randoms[0]], all_movies[randoms[1]], all_movies[randoms[2]]]
 
 def suggested_users(user):
-    return ExtendedUser.objects.all()
+    size = len(ExtendedUser.objects.all())
+    extended_user = ExtendedUser.objects.filter(user=user)[0]
+    all_users = ExtendedUser.objects.all()
+    user_id = extended_user.id
+    following_count = len(extended_user.following.all())
+
+    if following_count == size - 1:  # user is following everyone
+        return []
+
+    randoms = [0, 0, 0]
+
+    temp = random.randint(0, size - 1)
+    while all_users[temp] in extended_user.following.all() or temp + 1 == user_id:
+        temp = random.randint(0, size - 1)
+    randoms[0] = temp
+    if following_count == size - 2:  # the only not followed user is found
+        return [all_users[randoms[0]]]
+
+    temp = random.randint(0, size - 1)
+    while temp == randoms[0] or all_users[temp] in extended_user.following.all() or temp + 1 == user_id:
+        temp = random.randint(0, size - 1)
+    randoms[1] = temp
+    if following_count == size - 3:  # the only 2 not followed users are found
+        return [all_users[randoms[0]], all_users[randoms[1]]]
+
+    temp = random.randint(0, size - 1)
+    while temp == randoms[0] or temp == randoms[1] or all_users[temp] in extended_user.following.all() or temp + 1 == user_id:
+        temp = random.randint(0, size - 1)
+    randoms[2] = temp
+
+    return [all_users[randoms[0]], all_users[randoms[1]], all_users[randoms[2]]]
 
 def main(request):
     if request.user.is_authenticated():
