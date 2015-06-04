@@ -15,10 +15,12 @@
     </table>
     <table name="FilmClub_extendeduser" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="displayName" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="display_name" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="birthday" sqlType="DATE" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="user_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="gender" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="has_avatar" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="is_online" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
       <foreign-key name="#FAKE_FilmClub_extendeduser_1" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
       <exported-key name="#FAKE_FilmClub_extendeduser_following_1" table="FilmClub_extendeduser_following" schema="" catalog="" columns="to_extendeduser_id"/>

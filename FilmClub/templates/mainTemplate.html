@@ -113,7 +113,7 @@
                     {% for movie in movies %}
                     <div class="item">
                         <a class="ui inline link" href="/movies/{{ movie.id }}">
-                            <img class="ui tiny left floated rounded bordered image" src="{% static "img/posters/" %}{{ movie.poster }}" alt="{{ movie1.name }}" style="margin-bottom:6%;">
+                            <img class="ui tiny left floated rounded bordered image" src="{% static "img/posters/" %}{{ movie.poster }}" alt="{{ movie.name }}" style="margin-bottom:6%;">
                         </a>
                         <div class="content">
                             <a class="ui medium header" href="/movies/{{ movie.id }}">{{ movie.name }}</a>
@@ -121,7 +121,7 @@
                                 <span class="genre">{{ movie.genre }}</span>
                             </div>
                             <div class="description">
-                                {{ movie.description }}
+                                {{ movie.excerpt }}
                             </div>
                             <div class="extra">
                                 {{ movie.rating }}
@@ -141,17 +141,19 @@
                     <div class="item">
                         <a href="/users/{{ user.id }}">
                             {% if user.has_avatar %}
-                            <img class="ui tiny avatar left floated image" src="{% static "img/avatar" %}/user_{{ user.id }}">
+                            <img class="ui tiny avatar left floated image" src="{% static "img/avatar" %}/avatar_{{ user.id }}.jpg">
                             {% else %}
                             <img class="ui tiny avatar left floated image" src="{% static "img/avatar/default.png" %}">
                             {% endif %}
                         </a>
-                        <a class="ui medium header" href="/users/{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</a>
+                        <a class="ui medium header" href="/users/{{ user.id }}">{{ user.user.first_name }} {{ user.user.last_name }}</a>
                         <div class="content">
-                            <div class="ui tiny labeled icon button follow">
-                                <i class="add user icon"></i>
-                                Follow
-                            </div>
+                            <a href="/follow/user/{{ user.id }}">
+                                <div class="ui tiny labeled icon button follow">
+                                    <i class="add user icon"></i>
+                                    Follow
+                                </div>
+                            </a>
                         </div>
                     </div>
                 {% endfor %}
@@ -307,9 +309,6 @@
     </div>
 </div>
 <!-- page grid end -->
-<script>
-    {% block scripts %}
-    {% endblock %}
-</script>
+<script src="{% static "js/scripts.js" %}"></script>
 </body>
 </html>

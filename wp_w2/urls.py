@@ -19,10 +19,11 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'FilmClub.views.main'),
+    url(r'^follow/user/(?P<user_id>\d+)/', 'FilmClub.views.follow'),
     url(r'^register/', 'FilmClub.views.register'),
     url(r'^login/', 'FilmClub.views.sign_in'),
     url(r'^logout/', 'FilmClub.views.logout_user'),
-    # url(r'^', 'FilmClub.views.'),
+    url(r'^search/', 'FilmClub.views.search'),
     # url(r'^', 'FilmClub.views.'),
     # url(r'^', 'FilmClub.views.'),
 
