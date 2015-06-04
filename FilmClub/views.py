@@ -13,7 +13,8 @@ def main(request):
         #  don't forget .save()
         return render(request, 'timeline.html', {
             'title': "Timeline",
-            'movies': Movie.objects.all()
+            'movies': Movie.objects.all(),
+            'users': ExtendedUser.objects.all()[:2],
 
         })
     else:

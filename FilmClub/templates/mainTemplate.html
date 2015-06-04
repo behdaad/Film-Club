@@ -137,11 +137,16 @@
             <div class="ui segment">
                 <div class="ui header">Users to Follow</div>
                 <div class="ui divided list">
+                {% for user in users %}
                     <div class="item">
-                        <a href="userProfile.html">
-                            <img class="ui tiny avatar left floated image" src="img/avatar/stevie.jpg">
+                        <a href="/users/{{ user.id }}">
+                            {% if user.has_avatar %}
+                            <img class="ui tiny avatar left floated image" src="{% static "img/avatar" %}/user_{{ user.id }}">
+                            {% else %}
+                            <img class="ui tiny avatar left floated image" src="{% static "img/avatar/default.png" %}">
+                            {% endif %}
                         </a>
-                        <a class="ui medium header" href="userProfile.html">Stevie Works</a>
+                        <a class="ui medium header" href="/users/{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</a>
                         <div class="content">
                             <div class="ui tiny labeled icon button follow">
                                 <i class="add user icon"></i>
@@ -149,92 +154,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="item">
-                        <a href="userProfile.html">
-                            <img class="ui tiny avatar left floated image" src="img/avatar/steve.jpg">
-                        </a>
-                        <a class="ui medium header" href="userProfile.html">Steve Careers</a>
-                        <div class="content">
-                            <div class="ui tiny labeled icon button follow">
-                                <i class="add user icon"></i>
-                                Follow
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <a href="userProfile.html">
-                            <img class="ui tiny avatar left floated image" src="img/avatar/elliot.jpg">
-                        </a>
-                        <a class="ui medium header" href="userProfile.html">Elliot Occupations</a>
-                        <div class="content">
-                            <div class="ui tiny labeled icon button follow">
-                                <i class="add user icon"></i>
-                                Follow
-                            </div>
-                        </div>
-                    </div>
+                {% endfor %}
                 </div>
             </div>
             <!-- suggested users end -->
-
-            <!-- popular movies -->
-            <div class="ui segment">
-                <div class="ui header">Popular Movies</div>
-                <div class="ui divided items">
-                    <div class="item">
-                        <a class="ui link" href="filmProfile.html">
-                            <img class="ui tiny left floated rounded bordered image" src="img/123.jpg" alt="Enter the Matrix">
-                        </a>
-                        <div class="content">
-                            <a class="ui medium header" href="filmProfile.html">Enter the Matrix</a>
-                            <div class="meta">
-                                <span class="genre">Fantasy, Sci-Fi</span>
-                            </div>
-                            <div class="description">
-                                Haven't you seen Matrix? Leave this site. Now.
-                            </div>
-                            <div class="extra">
-                                Average rating: 9.8/10
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <a class="ui link" href="filmProfile.html">
-                            <img class="ui tiny left floated rounded bordered image" src="img/456.jpg" alt="Fight Club" style="margin-bottom:7%;">
-                        </a>
-                        <div class="content">
-                            <a class="ui medium header" href="filmProfile.html">Fight Club</a>
-                            <div class="meta">
-                                <span class="genre">Drama</span>
-                            </div>
-                            <div class="description">
-                                I can't believe there still exists some people on the face of Earth, who hasen't watched Fight Club. Get. Out. Now.
-                            </div>
-                            <div class="extra">
-                                Average rating: 9.7/10
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <a class="ui link" href="filmProfile.html">
-                            <img class="ui tiny left floated rounded bordered image" src="img/The-Pursuit-of-Happyness-Poster.jpg" alt="Pursuit of Happyness">
-                        </a>
-                        <div class="content">
-                            <a class="ui medium header" href="filmProfile.html">Pursuit of Happyness</a>
-                            <div class="meta">
-                                <span class="genre">Drama</span>
-                            </div>
-                            <div class="description">
-                                So you thought 'happyness' is a typo. Go to hell and watch this masterpiece.
-                            </div>
-                            <div class="extra">
-                                Average rating: 9.5/10
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- popular movies end -->
         </div>
         <!-- suggestions column end -->
 
