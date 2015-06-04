@@ -24,6 +24,7 @@ class Movie(models.Model):
     runningMinutes = models.IntegerField()
     releaseDate = models.DateField()
     poster = models.CharField(max_length=127)  # including the extension
+    rating = models.FloatField()
 
     def __str__(self):
         return self.name

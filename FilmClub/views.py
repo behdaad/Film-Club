@@ -9,12 +9,11 @@ from django.contrib.auth import authenticate, login, logout
 
 def main(request):
     if request.user.is_authenticated():
+        #  update ratings of movies to suggest
+        #  don't forget .save()
         return render(request, 'timeline.html', {
             'title': "Timeline",
-            'movie1': Movie.objects.all()[0],
-            'avg1': 8.4,
-            'movie2': Movie.objects.all()[0],
-            'avg2': 8.3,
+            'movies': Movie.objects.all()
 
         })
     else:
