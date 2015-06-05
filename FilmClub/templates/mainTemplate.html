@@ -18,10 +18,18 @@
 <body>
 <!-- header start -->
 <div class="ui fixed menu">
+    {% if page == 'timeline' %}
     <a class="active item" href="/">
+    {% else %}
+    <a class="item" href="/">
+    {% endif %}
         <i class="home icon"></i> Timeline
     </a>
+    {% if page == 'profile' %}
+    <a class="active item" href="/{{ user.id }}/">
+    {% else %}
     <a class="item" href="/{{ user.id }}/">
+    {% endif %}
         <i class="user icon"></i> Profile
     </a>
     <a class="item" href="/settings/">
@@ -124,7 +132,7 @@
                                 {{ movie.excerpt }}
                             </div>
                             <div class="extra">
-                                {{ movie.rating }}
+                                Average rating: {{ movie.rating }}
                             </div>
                         </div>
                     </div>

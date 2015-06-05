@@ -69,6 +69,7 @@ def main(request):
     if request.user.is_authenticated():
         return render(request, 'timeline.html', {
             'title': "Timeline",
+            'page': "timeline",
             'movies': suggested_movies(request.user),
             'users': suggested_users(request.user),
         })
@@ -160,21 +161,21 @@ def follow(request, user_id):
     return redirect("/")
 
 def search(request):
-    query = request.GET['query'].ascii_lowercase()
+    query = request.GET['query'].lower()
     extended_users = ExtendedUser.objects.all()
     user_results = []
     for eu in extended_users:
-        if query in eu.user.first_name.ascii_lowercase():
+        if query in eu.user.first_name.lower():
             user_results.append(eu)
-        elif query in eu.user.last_name:
+        elif query in eu.user.last_name.lower():
             user_results.append(eu)
-        elif query in eu.user.username:
+        elif query in eu.user.username.lower():
             user_results.append(eu)
 
     movies = Movie.objects.all()
     movie_results = []
     for m in movies:
-        if query in m.name:
+        if query in m.name.lower():
             movie_results.append(m)
 
     return render(request, 'search.html', {
