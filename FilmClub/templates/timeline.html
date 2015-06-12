@@ -1,322 +1,117 @@
 {% extends "mainTemplate.html" %}
+{% load staticfiles %}
 
 {% block main %}
 <div class="ui segment">
+{% for post in posts %}
     <div class="ui segment">
         <div class="ui vertical segment">
-            <a href="userProfile.html">
-                <img class="ui tiny avatar left floated middle aligned image" src="img/avatar/stevie.jpg" />
+            <a href="/user/{{ post.author.id }}">
+            {% if post.author.has_avatar %}
+                <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar' %}/avatar_{{ post.author.id }}.jpg" />
+            {% else %}
+                <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar/default.png' %}" />
+            {% endif %}
             </a>
             <div class="ui small header">
-                <a href="userProfile.html">Stevie</a> rated <a href="filmProfile.html"><span class="film popup" data-content="Director: Peter Sattler Average Rate: 7.1/10" data-variation="huge">Camp X-Ray</span></a> 4/10.
+                <a href="/user/{{ post.author.id }}">{{ post.author.display_name }}</a> rated <a href="/movie/{{ post.movie.id }}"><span class="film popup" data-content="Director: {{ post.movie.director.name }} Average Rate: {{ post.movie.rating }}/10" data-variation="huge">{{ post.movie.name }}</span></a> {{ post.rating }}/10.
             </div>
-            <div class="ui rating" data-rating="4" data-max-rating="10"></div>
+            <div class="ui rating" data-rating="{{ post.rating }}" data-max-rating="10"></div>
             <br />
-            <a href="singlePost.html"><div class="date">2 hours ago</div></a>
+            <a href="/post/{{ post.id }}"><div class="date">{{ post.date }}</div></a>
         </div>
         <div class="ui vertical segment">
-            <a href="filmProfile.html">
-                <img class="ui small left floated top aligned rounded bordered image" alt="Camp X-Ray" src="img/posters/camp_xray_xlg.jpg" />
+            <a href="movie/{{ post.movie.id }}">
+                <img class="ui small left floated top aligned rounded bordered image" alt="{{ post.movie.name }}" src="{% static 'img/posters' %}/{{ post.movie.poster }}" />
             </a>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                {{ post.review }}
             </p>
         </div>
 
-        <!-- like segment -->
-        <div class="ui vertical segment">
-            <div class="ui grid">
-                <div class="row">
-                    <div class="eight wide column" style="padding-left: 15px; width: 120px !important;">
-                        <div class="ui basic labeled left icon blue button likeButton" id="likeButton1">
-                            <i class="thumbs outline up icon"></i>
-                            Like
-                        </div>
-                    </div>
-                    <div class="eight wide column">
-                        <div class="ui mini horizontal statistic" style="margin-top: 5px;">
-                            <div class="value likeCount" id="likeCount1">34</div>
-                            <div class="label">people like this.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- like segment end -->
-
-        <!-- comments segment -->
-        <div class="ui vertical segment">
-            <form class="ui reply form commentForm">
-                <div class="field">
-                    <div class="ui action input">
-                        <input type="text" placeholder="Type your comment..." id="commentText1">
-                        <button class="ui small blue right labeled icon button commentButton" id="commentButton1">
-                            <i class="comment outline icon"></i>
-                            Comment
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <h4 class="ui dividing header"><span id="commentsCount1">3</span> Comments</h4>
-            <div class="ui comments" id="comments1">
-                <div class="comment">
-                    <a href="userProfile.html" class="avatar">
-                        <img src="img/avatar/matt.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author" href="userProfile.html">Matt Telbas</a>
-                        <div class="metadata">
-                            <span class="date">Today at 5:42PM</span>
-                        </div>
-                        <div class="text">
-                            How artistic!
-                        </div>
-                    </div>
-                </div>
-                <div class="comment">
-                    <a href="userProfile.html" class="avatar">
-                        <img src="img/avatar/jenny.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author"  href="userProfile.html">Jenny Hess</a>
-                        <div class="metadata">
-                            <span class="date">Yesterday at 12:30AM</span>
-                        </div>
-                        <div class="text">
-                            <p>This has been very useful for my "research". Thanks as well!</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comment">
-                    <a href="userProfile.html" class="avatar">
-                        <img src="img/avatar/joe.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author"  href="userProfile.html">Joe Henderson</a>
-                        <div class="metadata">
-                            <span class="date">5 days ago</span>
-                        </div>
-                        <div class="text">
-                            Dude, this is awesome. Thanks so much
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- comments segment end -->
+{#        <!-- like segment -->#}
+{#        <div class="ui vertical segment">#}
+{#            <div class="ui grid">#}
+{#                <div class="row">#}
+{#                    <div class="eight wide column" style="padding-left: 15px; width: 120px !important;">#}
+{#                        <div class="ui basic labeled left icon blue button likeButton" id="likeButton1">#}
+{#                            <i class="thumbs outline up icon"></i>#}
+{#                            Like#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="eight wide column">#}
+{#                        <div class="ui mini horizontal statistic" style="margin-top: 5px;">#}
+{#                            <div class="value likeCount" id="likeCount1">34</div>#}
+{#                            <div class="label">people like this.</div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <!-- like segment end -->#}
+{##}
+{#        <!-- comments segment -->#}
+{#        <div class="ui vertical segment">#}
+{#            <form class="ui reply form commentForm">#}
+{#                <div class="field">#}
+{#                    <div class="ui action input">#}
+{#                        <input type="text" placeholder="Type your comment..." id="commentText1">#}
+{#                        <button class="ui small blue right labeled icon button commentButton" id="commentButton1">#}
+{#                            <i class="comment outline icon"></i>#}
+{#                            Comment#}
+{#                        </button>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </form>#}
+{#            <h4 class="ui dividing header"><span id="commentsCount1">3</span> Comments</h4>#}
+{#            <div class="ui comments" id="comments1">#}
+{#                <div class="comment">#}
+{#                    <a href="userProfile.html" class="avatar">#}
+{#                        <img src="img/avatar/matt.jpg">#}
+{#                    </a>#}
+{#                    <div class="content">#}
+{#                        <a class="author" href="userProfile.html">Matt Telbas</a>#}
+{#                        <div class="metadata">#}
+{#                            <span class="date">Today at 5:42PM</span>#}
+{#                        </div>#}
+{#                        <div class="text">#}
+{#                            How artistic!#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="comment">#}
+{#                    <a href="userProfile.html" class="avatar">#}
+{#                        <img src="img/avatar/jenny.jpg">#}
+{#                    </a>#}
+{#                    <div class="content">#}
+{#                        <a class="author"  href="userProfile.html">Jenny Hess</a>#}
+{#                        <div class="metadata">#}
+{#                            <span class="date">Yesterday at 12:30AM</span>#}
+{#                        </div>#}
+{#                        <div class="text">#}
+{#                            <p>This has been very useful for my "research". Thanks as well!</p>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="comment">#}
+{#                    <a href="userProfile.html" class="avatar">#}
+{#                        <img src="img/avatar/joe.jpg">#}
+{#                    </a>#}
+{#                    <div class="content">#}
+{#                        <a class="author"  href="userProfile.html">Joe Henderson</a>#}
+{#                        <div class="metadata">#}
+{#                            <span class="date">5 days ago</span>#}
+{#                        </div>#}
+{#                        <div class="text">#}
+{#                            Dude, this is awesome. Thanks so much#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <!-- comments segment end -->#}
     </div>
-
-    <div class="ui segment">
-        <div class="ui vertical segment">
-            <a href="userProfile.html">
-                <img class="ui tiny avatar left floated middle aligned image" src="img/avatar/steve.jpg" />
-            </a>
-            <div class="ui small header">
-                <a href="userProfile.html">Steve</a> rated <a href="filmProfile.html"><span class="film popup" data-content="Director: Christopher Nolan Average Rate: 8.7/10" data-variation="huge">Interstellar</span></a> 7/10.
-            </div>
-            <div class="ui rating" data-rating="7" data-max-rating="10"></div>
-            <a href="singlePost.html"><div class="date">3 weeks ago</div></a>
-        </div>
-        <div class="ui vertical segment">
-            <a href="filmProfile.html">
-                <img class="ui small left floated top aligned rounded bordered image" alt="Interstellar" src="img/posters/interstellar2.jpg" />
-            </a>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-        </div>
-        <!-- like segment -->
-        <div class="ui vertical segment">
-            <div class="ui grid">
-                <div class="row">
-                    <div class="eight wide column" style="padding-left: 15px; width: 120px !important;">
-                        <div class="ui basic labeled left icon blue button likeButton" id="likeButton2">
-                            <i class="thumbs outline up icon"></i>
-                            Like
-                        </div>
-                    </div>
-                    <div class="eight wide column">
-                        <div class="ui mini horizontal statistic" style="margin-top: 5px;">
-                            <div class="value likeCount" id="likeCount2">2</div>
-                            <div class="label">people like this.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- like segment end -->
-
-        <!-- comments segment -->
-        <div class="ui vertical segment">
-            <form class="ui reply form commentForm">
-                <div class="field">
-                    <div class="ui action input">
-                        <input type="text" placeholder="Type your comment..." id="commentText2">
-                        <button class="ui small blue right labeled icon button commentButton" id="commentButton2">
-                            <i class="comment outline icon"></i>
-                            Comment
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <h4 class="ui dividing header"><span id="commentsCount2">2</span> Comments</h4>
-            <div class="ui comments" id="comments2">
-                <div class="comment">
-                    <a href="userProfile.html" class="avatar">
-                        <img src="img/avatar/matt.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author" href="userProfile.html">Matt Telbas</a>
-                        <div class="metadata">
-                            <span class="date">Today at 5:42PM</span>
-                        </div>
-                        <div class="text">
-                            How artistic!
-                        </div>
-                    </div>
-                </div>
-                <div class="comment">
-                    <a href="userProfile.html" class="avatar">
-                        <img src="img/avatar/joe.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author"  href="userProfile.html">Joe Henderson</a>
-                        <div class="metadata">
-                            <span class="date">5 days ago</span>
-                        </div>
-                        <div class="text">
-                            Dude, this is awesome. Thanks so much
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- comments segment end -->
-    </div>
-
-    <div class="ui segment">
-        <div class="ui vertical segment">
-            <a href="userProfile">
-                <img class="ui tiny avatar left floated middle aligned image" src="img/avatar/elliot.jpg" />
-            </a>
-            <div class="ui small header">
-                <a href="userProfile.html">Elliot</a> rated <a href="filmProfile.html"><span class="film popup" data-content="Director: Zack Snyderous Average Rate: 7.2/10" data-variation="huge">Man of Steel</span></a> 4/10.
-            </div>
-            <div class="ui rating" data-rating="4" data-max-rating="10"></div>
-            <a href="singlePost.html"><div class="date">7 months ago</div></a>
-        </div>
-        <div class="ui vertical segment">
-            <a href="filmProfile.html">
-                <img class="ui small left floated top aligned rounded bordered image" alt="Man of Steel" src="img/posters/man_of_steel.jpg" />
-            </a>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-        </div>
-        <!-- like segment -->
-        <div class="ui vertical segment">
-            <div class="ui grid">
-                <div class="row">
-                    <div class="eight wide column" style="padding-left: 15px; width: 120px !important;">
-                        <div class="ui basic labeled left icon blue button likeButton" id="likeButton3">
-                            <i class="thumbs outline up icon"></i>
-                            Like
-                        </div>
-                    </div>
-                    <div class="eight wide column">
-                        <div class="ui mini horizontal statistic" style="margin-top: 5px;">
-                            <div class="value likeCount" id="likeCount3">34</div>
-                            <div class="label">people like this.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- like segment end -->
-        <!-- comments segment -->
-        <div class="ui vertical segment">
-            <form class="ui reply form commentForm">
-                <div class="field">
-                    <div class="ui action input">
-                        <input type="text" placeholder="Type your comment..." id="commentText3">
-                        <button class="ui small blue right labeled icon button commentButton" id="commentButton3">
-                            <i class="comment outline icon"></i>
-                            Comment
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <h4 class="ui dividing header"><span id="commentsCount3">4</span> Comments</h4>
-            <div class="ui comments" id="comments3">
-                <div class="comment">
-                    <a href="userProfile.html" class="avatar">
-                        <img src="img/avatar/matt.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author" href="userProfile.html">Matt Telbas</a>
-                        <div class="metadata">
-                            <span class="date">Today at 5:42PM</span>
-                        </div>
-                        <div class="text">
-                            How artistic!
-                        </div>
-                    </div>
-                </div>
-                <div class="comment">
-                    <a href="userProfile.html" class="avatar">
-                        <img src="img/avatar/jenny.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author"  href="userProfile.html">Jenny Hess</a>
-                        <div class="metadata">
-                            <span class="date">Yesterday at 12:31AM</span>
-                        </div>
-                        <div class="text">
-                            <p>Pardon?</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comment">
-                    <a href="userProfile.html" class="avatar">
-                        <img src="img/avatar/jenny.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author"  href="userProfile.html">Jenny Hess</a>
-                        <div class="metadata">
-                            <span class="date">Yesterday at 12:30AM</span>
-                        </div>
-                        <div class="text">
-                            <p>This has been very useful for my "research". Thanks as well!</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="comment">
-                    <a href="userProfile.html" class="avatar">
-                        <img src="img/avatar/joe.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author"  href="userProfile.html">Joe Henderson</a>
-                        <div class="metadata">
-                            <span class="date">5 days ago</span>
-                        </div>
-                        <div class="text">
-                            Dude, this is awesome. Thanks so much
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- comments segment end -->
-    </div>
+{% endfor %}
 </div>
 {% endblock %}
 <!-- page grid end -->

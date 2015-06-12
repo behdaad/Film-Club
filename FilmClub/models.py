@@ -26,39 +26,10 @@ class Movie(models.Model):
     releaseDate = models.DateField()
     poster = models.CharField(max_length=127)  # including the extension
     rating = models.FloatField()
+    rating_calculation_date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self):
         return self.name
-
-
-class Post(models.Model):
-    author = models.ForeignKey(User)
-    date = models.DateTimeField()
-    rating = models.IntegerField()
-    movie = models.ForeignKey(Movie)
-    review = models.TextField()
-
-    def __str__(self):
-        return self.author + ' (' + self.movie + ')'
-
-
-class Like(models.Model):
-    user = models.ForeignKey(User)
-    post = models.ForeignKey(Post)
-    date = models.DateTimeField(default=datetime.datetime.now)
-
-    def __str__(self):
-        return self.user + " liked " + str(self.post)
-
-
-class Comment(models.Model):
-    user = models.ForeignKey(User)
-    post = models.ForeignKey(Post)
-    date = models.DateTimeField(default=datetime.datetime.now)
-
-    def __str__(self):
-        return self.user + " commented on " + str(self.post)
-
 
 class ExtendedUser(models.Model):
     user = models.OneToOneField(User)
@@ -71,3 +42,34 @@ class ExtendedUser(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Post(models.Model):
+    author = models.ForeignKey(ExtendedUser)
+    date = models.DateTimeField()
+    rating = models.IntegerField()
+    movie = models.ForeignKey(Movie)
+    review = models.TextField()
+
+    def __str__(self):
+        return str(self.author) + ' (' + str(self.movie) + ')'
+
+
+class Like(models.Model):
+    user = models.ForeignKey(ExtendedUser)
+    post = models.ForeignKey(Post)
+    date = models.DateTimeField(default=datetime.datetime.now)
+
+    def __str__(self):
+        return str(self.user) + " liked " + str(self.post)
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(ExtendedUser)
+    post = models.ForeignKey(Post)
+    date = models.DateTimeField(default=datetime.datetime.now)
+
+    def __str__(self):
+        return str(self.user) + " commented on " + str(self.post)
+
+

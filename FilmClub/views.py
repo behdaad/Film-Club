@@ -1,6 +1,6 @@
 import random
 
-from .models import ExtendedUser, Movie
+from .models import ExtendedUser, Movie, Post, Like, Comment
 
 from django import forms
 from django.contrib.auth.models import User
@@ -67,9 +67,31 @@ def suggested_users(user):
 
 def main(request):
     if request.user.is_authenticated():
+        extended_user = ExtendedUser.objects.filter(user=request.user)[0]
+        followings = extended_user.following.all()
+
+        posts = []
+        for user in followings:
+            likes = Like.objects.filter(user=user)
+            comments = Comment.objects.filter(user=user)
+            reviews = Post.objects.filter(author=user)
+
+            for like in likes:
+                posts.append(like.post)
+            for comment in comments:
+                posts.append(comment.post)
+            for review in reviews:
+                posts.append(review)
+
+        posts.sort(key=lambda x: x.date)
+        # headlines = []
+        # for post in posts:
+        #     headlines.append()
+
         return render(request, 'timeline.html', {
             'title': "Timeline",
             'page': "timeline",
+            'posts': posts,
             'movies': suggested_movies(request.user),
             'users': suggested_users(request.user),
         })
