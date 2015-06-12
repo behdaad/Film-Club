@@ -1,0 +1,10 @@
+{% extends 'profile.html' %}
+
+{% block button %}
+    <a href="/follow/user/{{ user.id }}?next={{ request.path }}">
+        <div class="ui labeled icon button" style="width:62%;">
+            <i class="add user icon"></i>
+            Follow
+        </div>
+    </a>
+{% endblock %}

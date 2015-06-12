@@ -27,11 +27,11 @@
         <i class="home icon"></i> Timeline
     </a>
     {% if page == 'profile' %}
-    <a class="active item" href="/{{ user.id }}/">
+    <a class="active item" href="/user/{{ logged_in.id }}/">
     {% else %}
-    <a class="item" href="/{{ user.id }}/">
+    <a class="item" href="/user/{{ logged_in.id }}/">
     {% endif %}
-        <i class="user icon"></i> Profile
+        <i class="user icon"></i> {{ logged_in.display_name }}
     </a>
     <a class="item" href="/settings/">
         <i class="setting icon"></i> Settings
@@ -157,7 +157,7 @@
                         </a>
                         <a class="ui medium header" href="/users/{{ user.id }}">{{ user.user.first_name }} {{ user.user.last_name }}</a>
                         <div class="content">
-                            <a href="/follow/user/{{ user.id }}">
+                            <a href="/follow/user/{{ user.id }}?next={{ request.path }}">
                                 <div class="ui tiny labeled icon button follow">
                                     <i class="add user icon"></i>
                                     Follow

@@ -2,8 +2,6 @@
 {% load staticfiles %}
 
 {% block main %}
-<div class="ui segment">
-{% for post in posts %}
     <div class="ui segment">
         <div class="ui vertical segment">
             <a href="/user/{{ post.author.id }}">
@@ -111,6 +109,5 @@
 {#        </div>#}
 {#        <!-- comments segment end -->#}
     </div>
-{% endfor %}
-</div>
 {% endblock %}
+<!-- page grid end -->
