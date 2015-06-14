@@ -1,4 +1,4 @@
-import random
+import random, datetime
 
 from .models import ExtendedUser, Movie, Post, Like, Comment
 
@@ -114,7 +114,7 @@ class ExtendedUserForm(forms.ModelForm):
         model = ExtendedUser
         exclude = ['user', 'following', 'gender']
 
-    # gender = forms.ChoiceField(choices=
+        # gender = forms.ChoiceField(choices=
 
 def register(request):
     if request.method == 'GET':
@@ -264,8 +264,12 @@ def show_user(request, user_id):
 
 def show_followers(request, user_id):
     target_user = ExtendedUser.objects.filter(id=user_id)[0]
-    users_list = target_user.following.all()
 
+    users_list = []
+    all_users = ExtendedUser.objects.all()
+    for user in all_users:
+        if target_user in user.following.all():
+            users_list.append(user)
     followings_count = len(target_user.following.all())
     followers_count = 0
     all_users = ExtendedUser.objects.all()
@@ -287,11 +291,7 @@ def show_followers(request, user_id):
 
 def show_followings(request, user_id):
     target_user = ExtendedUser.objects.filter(id=user_id)[0]
-    users_list = []
-    all_users = ExtendedUser.objects.all()
-    for user in all_users:
-        if target_user in user.following.all():
-            users_list.append(user)
+    users_list = target_user.following.all()
 
     followings_count = len(target_user.following.all())
     followers_count = 0
@@ -307,7 +307,7 @@ def show_followings(request, user_id):
         'movies': suggested_movies(request.user),
         'users': suggested_users(request.user),
         'users_list': users_list,
-        'followers': True,
+        'followers': False,
         'followings_count': followings_count,
         'followers_count': followers_count,
     })
@@ -321,4 +321,32 @@ def show_movie(request, movie_id):
         'movies': suggested_movies(request.user),
         'users': suggested_users(request.user),
         'movie': movie,
+    })
+
+def submit_review(request, movie_id):
+    movie = Movie.objects.filter(id=movie_id)[0]
+
+    new_post = Post()
+    new_post.author = ExtendedUser.objects.filter(user=request.user)[0]
+    new_post.date = datetime.datetime.now()
+    new_post.rating = int(request.POST['rating'])
+    new_post.movie = movie
+    new_post.review = request.POST['review']
+
+    new_post.save()
+
+    return redirect('/movie/' + str(movie_id) + '/reviews')
+
+def show_reviews(request, movie_id):
+    movie = Movie.objects.filter(id=movie_id)[0]
+
+    posts = Post.objects.filter(movie=movie).order_by('-date')
+
+    return render(request, 'movie_reviews.html', {
+        'title': movie.name,
+        'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
+        'movies': suggested_movies(request.user),
+        'users': suggested_users(request.user),
+        'movie': movie,
+        'posts': posts,
     })

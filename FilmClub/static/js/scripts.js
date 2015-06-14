@@ -424,7 +424,7 @@ $('#commentButton3').click(
 
 /* end like/comment JS */
 
-/* rating a movie JS */
+/* movie review JS */
 
 $('.ui .rating').rating('setting', 'clearable', true);
 
@@ -435,9 +435,16 @@ commentWindowLink.onclick = function()
     if (rateValue > 0)
     {
         $('#rating').text(rateValue);
-        $('#commentWindowModel').modal('show');
+        $('#rating_hidden_input').attr('value', rateValue);
+        $('#reviewModal')
+            .modal({
+                onApprove: function() {
+                    $('#review_form').submit();
+                }
+            })
+            .modal('show');
     }
     return false;
-}
+};
 
-/* end rating a movie JS */
+/* end movie review JS */

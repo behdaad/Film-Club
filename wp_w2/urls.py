@@ -30,7 +30,8 @@ urlpatterns = [
     url(r'^user/(?P<user_id>\d+)/followers/$', 'FilmClub.views.show_followers'),
     url(r'^user/(?P<user_id>\d+)/following/$', 'FilmClub.views.show_followings'),
     url(r'^movie/(?P<movie_id>\d+)/$', 'FilmClub.views.show_movie'),
-    # url(r'^movie/(?P<movie_id>\d+)/$', 'FilmClub.views.show_movie'),
+    url(r'^movie/(?P<movie_id>\d+)/submit_review$', 'FilmClub.views.submit_review'),
+    url(r'^movie/(?P<movie_id>\d+)/reviews$', 'FilmClub.views.show_reviews'),
 
 ]
 
