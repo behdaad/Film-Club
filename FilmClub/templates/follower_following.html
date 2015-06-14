@@ -1,0 +1,70 @@
+{% extends 'mainTemplate.html' %}
+{% load staticfiles %}
+
+{% block left %}
+    <div class="three wide computer five wide tablet five wide mobile column">
+        <div class="ui card">
+            <div class="ui medium image">
+                {% if user.has_avatar %}
+                    <img src="{% static 'img/avatar' %}/avatar_{{ user.id }}.jpg" />
+                {% else %}
+                    <img src="{% static 'img/avatar/default.png' %}" />
+                {% endif %}
+            </div>
+            <div class="content">
+                <a href="/user/{{ user.id }}" class="header">{{ user.user.first_name }} {{ user.user.last_name }}</a>
+                <div class="meta">
+                    <span class="date">Username: {{ user.user.username }}</span>
+                </div>
+            </div>
+            <div class="extra content">
+                <a href="/user/{{ user.id }}/followers">
+                    <i class="user icon"></i>
+                    {{ followers_count }} Followers
+                </a>
+                <br>
+                <a href="/user/{{ user.id }}/following">
+                    <i class="user icon"></i>
+                    {{ followings_count }} Following
+                </a>
+            </div>
+        </div>
+
+        {% block button %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block main %}
+    <!-- main column -->
+    <div class="six wide computer eleven wide tablet sixteen wide mobile column">
+        <div class="ui segment">
+            <!-- <div class="ui vertical segment"> -->
+            <div class="ui medium header">
+                {% if followers %}
+                Followers:
+                {% else %}
+                Following:
+                {% endif %}
+            </div>
+            <!-- </div> -->
+            <div class="ui vertical segment">
+                <div class="ui divided list">
+                {% for user in users_list %}
+                    <div class="item">
+                        <a href="/user/{{ user.id }}">
+                            {% if user.has_avatar %}
+                            <img class="ui avatar left floated image" src="{% static "img/avatar" %}/avatar_{{ user.id }}.jpg">
+                            {% else %}
+                            <img class="ui avatar left floated image" src="{% static "img/avatar/default.png" %}">
+                            {% endif %}
+                        </a>
+                        <a class="ui tiny header" href="/user/{{ user.id }}">{{ user.display_name }}</a>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- main column end -->
+{% endblock %}

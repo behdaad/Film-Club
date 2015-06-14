@@ -19,16 +19,18 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'FilmClub.views.main'),
-    url(r'^follow/user/(?P<user_id>\d+)/', 'FilmClub.views.follow'),
-    url(r'^unfollow/user/(?P<user_id>\d+)/', 'FilmClub.views.unfollow'),
-    url(r'^register/', 'FilmClub.views.register'),
-    url(r'^login/', 'FilmClub.views.sign_in'),
-    url(r'^logout/', 'FilmClub.views.logout_user'),
-    url(r'^search/', 'FilmClub.views.search'),
-    url(r'^post/(?P<post_id>\d+)', 'FilmClub.views.single_post'),
-    url(r'^user/(?P<user_id>\d+)', 'FilmClub.views.show_user'),
-    url(r'^user/(?P<user_id>\d+)/followers', 'FilmClub.views.show_followers'),
-    url(r'^user/(?P<user_id>\d+)/following', 'FilmClub.views.show_followings'),
+    url(r'^follow/user/(?P<user_id>\d+)/$', 'FilmClub.views.follow'),
+    url(r'^unfollow/user/(?P<user_id>\d+)/$', 'FilmClub.views.unfollow'),
+    url(r'^register/$', 'FilmClub.views.register'),
+    url(r'^login/$', 'FilmClub.views.sign_in'),
+    url(r'^logout/$', 'FilmClub.views.logout_user'),
+    url(r'^search/$', 'FilmClub.views.search'),
+    url(r'^post/(?P<post_id>\d+)/$', 'FilmClub.views.single_post'),
+    url(r'^user/(?P<user_id>\d+)/$', 'FilmClub.views.show_user'),
+    url(r'^user/(?P<user_id>\d+)/followers/$', 'FilmClub.views.show_followers'),
+    url(r'^user/(?P<user_id>\d+)/following/$', 'FilmClub.views.show_followings'),
+    url(r'^movie/(?P<movie_id>\d+)/$', 'FilmClub.views.show_movie'),
+    # url(r'^movie/(?P<movie_id>\d+)/$', 'FilmClub.views.show_movie'),
 
 ]
 

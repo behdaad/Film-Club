@@ -141,11 +141,8 @@ $('#loginForm')
 
 /* end login.html JS */
 
-/* timeline.html JS */
-
-// in case of adding the ability to rate movies anywhere outside filmProfile.html, this line should be removed
-if ($('title').text() != "Film Profile – Film Club")
-    $('.ui.rating').rating('disable');
+/* main JS */
+$('.ui.rating').rating('disable');
 $('.film.popup').popup({});
 $('#notificationsItem').popup({
     on: 'click',
@@ -153,12 +150,114 @@ $('#notificationsItem').popup({
     transition: 'fade down'
 });
 
+$('#closeChat').on("click", function(){
+    $('#chatSegment').hide();
+    chatOpen = false;
+    $('#chatHeader').text("");
+});
+
+/* end main JS */
+
+/* search JS */
+
 $('#searchIcon').click(
     function()
     {
         $('#searchForm').submit();
     }
 );
+
+var content = [
+    {
+        title: 'Steve Jobs',
+        description: 'User'
+    },
+    {
+        title: 'Steve Jobs',
+        description: 'Movie'
+    },
+    {
+        title: 'Inside Job',
+        description: 'Movie'
+    },
+    {
+        title: 'The Italian Job',
+        description: 'Movie'
+    },
+    {
+        title: 'Enter the Matrix',
+        description: 'Movie'
+    },
+    {
+        title: 'Matrix Reloaded',
+        description: 'Movie'
+    },
+    {
+        title: 'Matrix Revolutions',
+        description: 'Movie'
+    },
+    {
+        title: 'Steven Wilson',
+        description: 'User'
+    }
+];
+
+$('.ui.search').search(
+    {
+        source: content,
+        searchFields: [ 'title' ],
+        transition: 'fade down'
+    }
+);
+
+
+$('.menu .item').tab();
+
+
+
+/* end search JS */
+
+/* chat JS */
+
+var hell;
+var chatOpen = false;
+$('.chat').on("click", function(){
+    if (!chatOpen)
+    {
+        $('#chatSegment').show();
+        hell = $(this);
+        var name = $(this).children()[2].children[0].textContent;
+        $('#chatHeader').append(name);
+        chatOpen = true;
+        $('#chatSegment').append(
+            '<div class="ui message">\
+            Hello! You there?\
+          </div>'
+        );
+        $('#chatSegment').append(
+            '<div class="ui blue message">\
+            Well yes! How are you man?\
+          </div>'
+        );
+
+        $('#chatSegment').append(
+            '<form class="ui reply form commentForm">\
+            <div class="field">\
+              <div class="ui action input">\
+                <input type="text">\
+                <button class="ui small blue icon button commentButton" id="commentButton3">\
+                  <i class="comment outline icon"></i>\
+                </button>\
+              </div>\
+            </div>\
+          </form>'
+        );
+    }
+});
+
+/* end chat JS */
+
+/* like/comment JS */
 
 var liked1 = false;
 
@@ -323,196 +422,22 @@ $('#commentButton3').click(
     }
 );
 
+/* end like/comment JS */
 
-var content = [
+/* rating a movie JS */
+
+$('.ui .rating').rating('setting', 'clearable', true);
+
+var commentWindowLink = document.getElementById('commentWindow');
+commentWindowLink.onclick = function()
+{
+    var rateValue = $('#commentWindow').rating('get rating');
+    if (rateValue > 0)
     {
-        title: 'Steve Jobs',
-        description: 'User',
-    },
-    {
-        title: 'Steve Jobs',
-        description: 'Movie',
-    },
-    {
-        title: 'Inside Job',
-        description: 'Movie',
-    },
-    {
-        title: 'The Italian Job',
-        description: 'Movie',
-    },
-    {
-        title: 'Enter the Matrix',
-        description: 'Movie'
-    },
-    {
-        title: 'Matrix Reloaded',
-        description: 'Movie'
-    },
-    {
-        title: 'Matrix Revolutions',
-        description: 'Movie'
-    },
-    {
-        title: 'Steven Wilson',
-        description: 'User'
+        $('#rating').text(rateValue);
+        $('#commentWindowModel').modal('show');
     }
-];
+    return false;
+}
 
-$('.ui.search').search(
-    {
-        source: content,
-        searchFields: [ 'title' ],
-        transition: 'fade down'
-    }
-);
-
-var hell;
-var chatOpen = false;
-$('.chat').on("click", function(){
-    if (!chatOpen)
-    {
-        $('#chatSegment').show();
-        hell = $(this);
-        var name = $(this).children()[2].children[0].textContent;
-        $('#chatHeader').append(name);
-        chatOpen = true;
-        $('#chatSegment').append(
-            '<div class="ui message">\
-            Hello! You there?\
-          </div>'
-        );
-        $('#chatSegment').append(
-            '<div class="ui blue message">\
-            Well yes! How are you man?\
-          </div>'
-        );
-
-        $('#chatSegment').append(
-            '<form class="ui reply form commentForm">\
-            <div class="field">\
-              <div class="ui action input">\
-                <input type="text">\
-                <button class="ui small blue icon button commentButton" id="commentButton3">\
-                  <i class="comment outline icon"></i>\
-                </button>\
-              </div>\
-            </div>\
-          </form>'
-        );
-    }
-});
-
-$('#closeChat').on("click", function(){
-    $('#chatSegment').hide();
-    chatOpen = false;
-    $('#chatHeader').text("");
-});
-
-/* end timeline.html JS */
-
-/* search.html JS */
-
-$('.ui.rating').rating('disable');
-
-$('#notificationsItem').popup({
-    on: 'click',
-    inline: true
-});
-
-$('#searchIcon').click(
-    function()
-    {
-        $('#searchForm').submit();
-    }
-);
-
-var content = [
-    {
-        title: 'Steve Jobs',
-        description: 'User',
-    },
-    {
-        title: 'Steve Jobs',
-        description: 'Movie',
-    },
-    {
-        title: 'Inside Job',
-        description: 'Movie',
-    },
-    {
-        title: 'The Italian Job',
-        description: 'Movie',
-    },
-    {
-        title: 'Enter the Matrix',
-        description: 'Movie'
-    },
-    {
-        title: 'Matrix Reloaded',
-        description: 'Movie'
-    },
-    {
-        title: 'Matrix Revolutions',
-        description: 'Movie'
-    },
-    {
-        title: 'Steven Wilson',
-        description: 'User'
-    }
-];
-
-$('.ui.search').search(
-    {
-        source: content,
-        searchFields: [ 'title' ],
-        transition: 'fade down'
-    }
-);
-
-
-$('.menu .item').tab();
-
-var hell;
-var chatOpen = false;
-$('.chat').on("click", function(){
-    if (!chatOpen)
-    {
-        $('#chatSegment').show();
-        hell = $(this);
-        var name = $(this).children()[2].children[0].textContent;
-        $('#chatHeader').append(name);
-        chatOpen = true;
-        $('#chatSegment').append(
-            '<div class="ui message">\
-            Hello! You there?\
-          </div>'
-        );
-        $('#chatSegment').append(
-            '<div class="ui blue message">\
-            Well yes! How are you man?\
-          </div>'
-        );
-
-        $('#chatSegment').append(
-            '<form class="ui reply form commentForm">\
-            <div class="field">\
-              <div class="ui action input">\
-                <input type="text">\
-                <button class="ui small blue icon button commentButton" id="commentButton3">\
-                  <i class="comment outline icon"></i>\
-                </button>\
-              </div>\
-            </div>\
-          </form>'
-        );
-    }
-});
-
-$('#closeChat').on("click", function(){
-    $('#chatSegment').hide();
-    chatOpen = false;
-    $('#chatHeader').text("");
-});
-
-/* end search.html JS */
+/* end rating a movie JS */

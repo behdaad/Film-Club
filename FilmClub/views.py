@@ -253,7 +253,7 @@ def show_user(request, user_id):
         'followers_count': followers_count,
     }
 
-    if target_user.user == logged_in_extended_user:
+    if target_user == logged_in_extended_user:
         return render(request, 'user_profile.html', dictionary)
 
     followings = logged_in_extended_user.following.all()
@@ -263,8 +263,62 @@ def show_user(request, user_id):
         return render(request, 'not_following_profile.html', dictionary)
 
 def show_followers(request, user_id):
-    pass
+    target_user = ExtendedUser.objects.filter(id=user_id)[0]
+    users_list = target_user.following.all()
+
+    followings_count = len(target_user.following.all())
+    followers_count = 0
+    all_users = ExtendedUser.objects.all()
+    for user in all_users:
+        if target_user in user.following.all():
+            followers_count += 1
+
+    return render(request, 'follower_following.html', {
+        'title': target_user.display_name + "'s Followers",
+        'user': target_user,
+        'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
+        'movies': suggested_movies(request.user),
+        'users': suggested_users(request.user),
+        'users_list': users_list,
+        'followers': True,
+        'followings_count': followings_count,
+        'followers_count': followers_count,
+    })
 
 def show_followings(request, user_id):
-    pass
+    target_user = ExtendedUser.objects.filter(id=user_id)[0]
+    users_list = []
+    all_users = ExtendedUser.objects.all()
+    for user in all_users:
+        if target_user in user.following.all():
+            users_list.append(user)
 
+    followings_count = len(target_user.following.all())
+    followers_count = 0
+    all_users = ExtendedUser.objects.all()
+    for user in all_users:
+        if target_user in user.following.all():
+            followers_count += 1
+
+    return render(request, 'follower_following.html', {
+        'title': target_user.display_name + "'s Followers",
+        'user': target_user,
+        'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
+        'movies': suggested_movies(request.user),
+        'users': suggested_users(request.user),
+        'users_list': users_list,
+        'followers': True,
+        'followings_count': followings_count,
+        'followers_count': followers_count,
+    })
+
+def show_movie(request, movie_id):
+    movie = Movie.objects.filter(id=movie_id)[0]
+
+    return render(request, 'filmProfile.html', {
+        'title': movie.name,
+        'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
+        'movies': suggested_movies(request.user),
+        'users': suggested_users(request.user),
+        'movie': movie,
+    })

@@ -1,684 +1,153 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <!-- Standard Meta -->
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+{% extends 'mainTemplate.html' %}
+{% load staticfiles %}
 
-  <!-- Site Properities -->
-  <title>Film Profile</title>
-
-  <link rel="stylesheet" type="text/css" href="dist/semantic.css" />
-  <link rel="stylesheet" type="text/css" href="dist/components/grid.css" />
-  <link rel="stylesheet" type="text/css" href="css/style.css" />
-
-  <script src="js/jquery-2.1.3.min.js"></script>
-  <script src="dist/semantic.js"></script>
-  <script src="js/ourJS.js"></script>
-</head>
-
-<body>
-  <!-- header start -->
-  <div class="ui fixed menu">
-    <a class="item" href="timeline.html">
-      <i class="home icon"></i> Timeline
-    </a>
-    <a class="item" href="userProfile.html">
-      <i class="user icon"></i> Profile
-    </a>
-    <a class="item">
-      <i class="setting icon"></i> Settings
-    </a>
-    <a class="item" id="notificationsItem">
-      <i class="announcement sign icon"></i>Notifications
-    </a>
-    <div class="ui very wide popup" id="notificationsPopup">
-      <div class="ui divided list">
-        <div class="item">
-          <img class="ui avatar image" src="img/avatar/elliot.jpg">
-          <div class="content">
-            <a class="header">Elliot Hemmingway</a>
-            <div class="description">Liked your post.</div>
-          </div>
-        </div>
-        <div class="item">
-          <img class="ui avatar image" src="img/avatar/stevie.jpg">
-          <div class="content">
-            <a class="header">Stevie Penguin</a>
-            <div class="description">Commented on your post.</div>
-          </div>
-        </div>
-        <div class="item">
-          <img class="ui avatar image" src="img/avatar/steve.jpg">
-          <div class="content">
-            <a class="header">Steve Cook</a>
-            <div class="description">Started to follow you.</div>
-          </div>
-        </div>
-        <div class="item">
-          <img class="ui avatar image" src="img/avatar/jenny.jpg">
-          <div class="content">
-            <a class="header">Jenny Hess</a>
-            <div class="description">Commented on a post you've commented on.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="right menu">
-      <div class="item">
-        <a href="timeline.html"><img class="ui image" src="img/LOGO.png" height="18"></a>
-      </div>
-      <div class="item">
-        <div class="ui search">
-          <form action="search.html" method="get" id="searchForm">
-            <div class="ui transparent icon input">
-              <input class="prompt" type="text" placeholder="Search..." name="query">
-              <span id="searchIconSpan">
-                <i class="search link icon" id="searchIcon"></i>
-              </span>
-            </div>
-          </form>
-          <div class="results" style="left: -11px;" id="searchResults" style="z-index: 999;"></div>
-        </div>
-      </div>
-      <a class="item" href="login.html">
-        <i class="sign out icon"></i> Logout
-      </a>
-    </div>
-  </div>
-  <!-- header end -->
-
-  <!-- page grid -->
-  <div class="ui page divided grid" style="padding-right: 10px; padding-left: 10px;">
-    <div class="row"></div>
-    <div class="row">
-      <!-- card column -->
-      <div class="three wide computer only column"> 
+{% block left %}
+    <!-- card column -->
+    <div class="three wide computer only column">
         <div class="ui card">
-          <div class="row"></div>
-          <div class="ui divided items" style="margin-left:15%;">
-            <div class="item">
-              <i class="left floated big film icon"></i>
-              <a class="ui medium header" href="filmProfile.html" style="margin-left:5%;">Interstellar</a>
+            <div class="row"></div>
+            <div class="ui divided items" style="margin-left:15%;">
+                <div class="item">
+                    <i class="left floated big film icon"></i>
+                    <a class="ui medium header" href="/movie/{{ movie.id }}" style="margin-left:5%;">{{ movie.name }}</a>
+                </div>
             </div>
-          </div>          
-          <div class="ui medium image">
-            <img src="img/interstellar1.jpg" alt="Interstellar">
-          </div>
-          <div class="content">
-            <h3 class="center aligned header">A movie about science and some unrelated non-sense.</h3>
-          </div>
-          <div class="extra content">
-            <table class="ui very basic small compact table" style="margin-bottom: 2px;">
-              <tbody>
-                <tr>
-                  <td>Director</td>
-                  <td>Christopher Nolan</td>
-                </tr>
-                <tr>
-                  <td>Year</td>
-                  <td>2014</td>
-                </tr>
-                <tr>
-                  <td>Genre</td>
-                  <td>Sci-fi</td>
-                </tr>
-                <tr>
-                  <td>Running time</td>
-                  <td>169 minutes</td>
-                </tr>
-                <tr>
-                  <td>Language</td>
-                  <td>English</td>
-                </tr>
-                <tr>
-                  <td>Average rating</td>
-                  <td>8.7/10</td>
-                </tr>
-              </tbody>
-            </table>
-            
-            <i class="linkify icon"></i>
-            <a href="http://www.imdb.com/title/tt0816692/" target="_blank">
-              <img class="ui right floated image" alt="IMDb" src="img/imdb.png" style="width: 80px; margin-right: 30px;">
-            </a>
-          </div>
+            <div class="ui medium image">
+                <img src="{% static "img/posters" %}/{{ movie.poster }}" alt="{{ movie.name }}">
+            </div>
+            <div class="content">
+                <h3 class="center aligned header">{{ movie.excerpt }}</h3>
+            </div>
+            <div class="extra content">
+                <table class="ui very basic small compact table" style="margin-bottom: 2px;">
+                    <tbody>
+                    <tr>
+                        <td>Director</td>
+                        <td>{{ movie.director.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Release Date</td>
+                        <td>{{ movie.releaseDate }}</td>
+                    </tr>
+                    <tr>
+                        <td>Genre</td>
+                        <td>{{ movie.genre }}</td>
+                    </tr>
+                    <tr>
+                        <td>Running time</td>
+                        <td>{{ movie.runningMinutes }}</td>
+                    </tr>
+                    {#                    <tr>#}
+                    {#                        <td>Language</td>#}
+                    {#                        <td>English</td>#}
+                    {#                    </tr>#}
+                    <tr>
+                        <td>Average rating</td>
+                        <td>{{ movie.rating }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <i class="linkify icon"></i>
+                <a href="http://www.imdb.com/title/tt{{ movie.imdb_link }}" target="_blank">
+                    <img class="ui right floated image" alt="IMDb Link" src="{% static "img/layout/" %}imdb.png" style="width: 80px; margin-right: 30px;">
+                </a>
+            </div>
         </div>
 
-        <a class="ui link" href="opinionList.html">
-          <div class="ui labeled icon button">
-            <i class="comments icon"></i>
-            Users' Opinions
-          </div>
+        <a class="ui link" href="/movie/{{ movie.id }}/reviews">
+            <div class="ui labeled icon button">
+                <i class="comments icon"></i>
+                Users' Reviews
+            </div>
         </a>
-      </div>
-      <!-- card column end -->
-
-      <!-- main column -->
-      <div class="six wide column">
-        <div class="ui segment">
-          <div class="ui segment">
-            <div class="ui small header">
-              Rate this movie:
-            </div>
-            <div class="ui huge rating" data-max-rating="10" id="commentWindow"></div>
-          </div>
-          <div class="ui segment">
-            <div class="ui vertical segment">
-              <div class="ui small header">
-                Description:
-              </div>
-            </div>
-            <div class="ui vertical segment">
-              <p>
-                Interstellar is a 2014 epic film directed by Christopher Nolan, starring Matthew McConaughey, Anne Hathaway, Jessica Chastain and Michael Caine. The film features a crew of astronauts who travel through a wormhole in search of a new home for humanity. Brothers Christopher and Jonathan Nolan wrote the screenplay, which has its origins in a script Jonathan developed in 2007. Christopher Nolan produced the film with his wife Emma Thomas through their production company Syncopy and with Lynda Obst through Lynda Obst Productions. Caltech theoretical physicist Kip Thorne, whose work inspired the film, was an executive producer and acted as scientific consultant. Warner Bros., Paramount Pictures, and Legendary Pictures co-financed the film.
-              </p>
-              <p>
-                Interstellar premiered on October 26, 2014, in Los Angeles. In North America, it was released in film stock, expanding to venues using digital projectors. The film was successful at the box office with a worldwide gross of over $670 million, and received positive reviews from critics, who gave particular praise to the film's scientific accuracy, science fiction themes, musical score, visual effects and performances from Matthew McConaughey, Anne Hathaway, Jessica Chastain, and Mackenzie Foy. At the 87th Academy Awards, the film won the Best Visual Effects award and received four other nominations — Best Original Score, Best Sound Mixing, Best Sound Editing and Best Production Design, as well as several other awards and nominations particularly for its visual effects, cinematography, musical score, and the performance of Mackenzie Foy.
-              </p>
-            </div>
-          </div>
-
-          <div class="ui segment">
-            <div class="ui vertical segment">
-              <div class="ui small header">
-                Cast:
-              </div>
-            </div>
-            <div class="ui vertical segment">
-              <div class="ui bulleted list">
-                <div class="item">Matthew McConaughey as Cooper</div>
-                <div class="item">Anne Hathaway as Dr. Amelia Brand</div>
-                <div class="item">David Gyasi as Dr. Romilly</div>
-                <div class="item">Jessica Chastain as Murphy "Murph" Cooper</div>
-                <div class="item">Mackenzie Foy as young Murphy</div>
-                <div class="item">Michael Caine as Dr. John Brand</div>
-                <div class="item">Casey Affleck as Tom Cooper, Murphy's brother</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="ui segment">
-            <div class="ui vertical segment">
-              <div class="ui small header">
-                Crew:
-              </div>
-
-            </div>
-            <div class="ui vertical segment">
-              <div class="ui bulleted list">
-                <div class="item">Christopher Nolan – director, producer, writer</div>
-                <div class="item">Jonathan Nolan – writer</div>
-                <div class="item">Emma Thomas – producer</div>
-                <div class="item">Lynda Obst – producer</div>
-                <div class="item">Hans Zimmer – music composer</div>
-                <div class="item">Paul Franklin – visual effects supervisor</div>
-                <div class="item">Kip Thorne – consultant, executive producer</div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-      <!-- main column end -->
-
-      <!-- suggestions column -->
-      <div class="four wide computer five wide tablet only column">
-
-        <!-- suggested movies -->
-        <div class="ui segment">
-          <div class="ui header">Suggested Movies</div>
-          <div class="ui divided items">
-            <div class="item">
-              <a class="ui inline link" href="filmProfile.html">
-                <img class="ui tiny left floated rounded bordered image" src="img/posters/interstellar2.jpg" alt="Interstellar" style="margin-bottom:6%;">
-              </a>
-              <div class="content">
-                <a class="ui medium header" href="filmProfile.html">Interstellar</a>
-                <div class="meta">
-                  <span class="genre">Sci-Fi</span>
-                </div>
-                <div class="description">
-                  A movie about science and some unrelated non-sense which was supposed to be completely based on science, but failed miserably in this sense.
-                </div>
-                <div class="extra">
-                  Average rating: 8.2/10
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <a class="ui link" href="filmProfile.html">
-                <img class="ui tiny left floated rounded bordered image" src="img/posters/WHIPLASH+onesheet.jpg" alt="Whiplash">
-              </a>
-              <div class="content">
-                <a class="ui medium header" href="filmProfile.html">Whiplash</a>
-                <div class="meta">
-                  <span class="genre">Drama</span>
-                </div>
-                <div class="description">
-                  A movie about a maniac, insane, rude musician.
-                </div>
-                <div class="extra">
-                  Average rating: 7.7/10
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <a class="ui link" href="filmProfile.html">
-                <img class="ui tiny left floated rounded bordered image" src="img/posters/camp_xray_xlg.jpg" alt="Camp X-Ray">
-              </a>
-              <div class="content">
-                <a class="ui medium header" href="filmProfile.html">Camp X-Ray</a>
-                <div class="meta">
-                  <span class="genre">War, Drama</span>
-                </div>
-                <div class="description">
-                  A movie without a plot. Pretty cool, huh?
-                </div>
-                <div class="extra">
-                  Average rating: 2.2/10
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- suggested movies end -->
-
-        <!-- suggested users -->
-        <div class="ui segment">
-          <div class="ui header">Users to Follow</div>
-          <div class="ui divided list">
-            <div class="item">
-              <a href="userProfile.html">
-                <img class="ui tiny avatar left floated image" src="img/avatar/stevie.jpg">
-              </a>
-              <a class="ui medium header" href="userProfile.html">Stevie Works</a>
-              <div class="content">
-                <div class="ui tiny labeled icon button follow">
-                  <i class="add user icon"></i>
-                  Follow
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <a href="userProfile.html">
-                <img class="ui tiny avatar left floated image" src="img/avatar/steve.jpg">
-              </a>
-              <a class="ui medium header" href="userProfile.html">Steve Careers</a>
-              <div class="content">
-                <div class="ui tiny labeled icon button follow">
-                  <i class="add user icon"></i>
-                  Follow
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <a href="userProfile.html">
-                <img class="ui tiny avatar left floated image" src="img/avatar/elliot.jpg">
-              </a>
-              <a class="ui medium header" href="userProfile.html">Elliot Occupations</a>
-              <div class="content">
-                <div class="ui tiny labeled icon button follow">
-                  <i class="add user icon"></i>
-                  Follow
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- suggested users end -->
-
-        <!-- popular movies -->
-        <div class="ui segment">
-          <div class="ui header">Popular Movies</div>
-          <div class="ui divided items">
-            <div class="item">
-              <a class="ui link" href="filmProfile.html">
-                <img class="ui tiny left floated rounded bordered image" src="img/123.jpg" alt="Enter the Matrix">
-              </a>
-              <div class="content">
-                <a class="ui medium header" href="filmProfile.html">Enter the Matrix</a>
-                <div class="meta">
-                  <span class="genre">Fantasy, Sci-Fi</span>
-                </div>
-                <div class="description">
-                  Haven't you seen Matrix? Leave this site. Now.
-                </div>
-                <div class="extra">
-                  Average rating: 9.8/10
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <a class="ui link" href="filmProfile.html">
-                <img class="ui tiny left floated rounded bordered image" src="img/456.jpg" alt="Fight Club" style="margin-bottom:7%;">
-              </a>
-              <div class="content">
-                <a class="ui medium header" href="filmProfile.html">Fight Club</a>
-                <div class="meta">
-                  <span class="genre">Drama</span>
-                </div>
-                <div class="description">
-                  I can't believe there still exists some people on the face of Earth, who hasen't watched Fight Club. Get. Out. Now.
-                </div>
-                <div class="extra">
-                  Average rating: 9.7/10
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <a class="ui link" href="filmProfile.html">
-                <img class="ui tiny left floated rounded bordered image" src="img/The-Pursuit-of-Happyness-Poster.jpg" alt="Pursuit of Happyness">
-              </a>
-              <div class="content">
-                <a class="ui medium header" href="filmProfile.html">Pursuit of Happyness</a>
-                <div class="meta">
-                  <span class="genre">Drama</span>
-                </div>
-                <div class="description">
-                  So you thought 'happyness' is a typo. Go to hell and watch this masterpiece.
-                </div>
-                <div class="extra">
-                  Average rating: 9.5/10
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- popular movies end -->
-      </div>
-      <!-- suggestions column end -->
-      
-      <!-- chat column -->
-      <div class="three wide computer only fixed column" style="z-index: 1; position: fixed; right: -1%;">
-        <!-- <div class="ui sticky fixed"> -->
-        <div class="ui segment">
-          <div class="segment" style="height:389px; overflow-y:scroll;">
-            <div class="ui divided list">
-
-              <div class="item chat">
-                <i class="right floated compact ui green circle icon"></i>
-                <img class="ui avatar image" src="img/avatar/elliot.jpg">
-                <div class="content">
-                  <div class="header">Justen Kitsune</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui green circle icon"></i>
-                <img class="ui avatar image" src="img/avatar/joe.jpg">
-                <div class="content">
-                  <div class="header">Joe Henderson</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui circle thin icon"></i>
-                <img class="ui avatar image" src="img/avatar/stevie.jpg">
-                <div class="content">
-                  <div class="header">Stevie Works</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui circle thin icon"></i>
-                <img class="ui avatar image" src="img/avatar/steve.jpg">
-                <div class="content">
-                  <div class="header">Steve Careers</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui green circle icon"></i>
-                <img class="ui avatar image" src="img/avatar/elliot.jpg">
-                <div class="content">
-                  <div class="header">Elliot Occupations</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui green circle icon"></i>
-                <img class="ui avatar image" src="img/avatar/matt.jpg">
-                <div class="content">
-                  <div class="header">Matt Donovan</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui circle thin icon"></i>
-                <img class="ui avatar image" src="img/avatar/jenny.jpg">
-                <div class="content">
-                  <div class="header">Jenny Lewis</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui green circle icon"></i>
-                <img class="ui avatar image" src="img/avatar/joe.jpg">
-                <div class="content">
-                  <div class="header">Joe Henderson</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui circle thin icon"></i>
-                <img class="ui avatar image" src="img/avatar/elliot.jpg">
-                <div class="content">
-                  <div class="header">Justen Kitsune</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui circle thin icon"></i>
-                <img class="ui avatar image" src="img/avatar/joe.jpg">
-                <div class="content">
-                  <div class="header">Joe Henderson</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui circle thin icon"></i>
-                <img class="ui avatar image" src="img/avatar/stevie.jpg">
-                <div class="content">
-                  <div class="header">Stevie Works</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui circle thin icon"></i>
-                <img class="ui avatar image" src="img/avatar/steve.jpg">
-                <div class="content">
-                  <div class="header">Steve Careers</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui green circle icon"></i>
-                <img class="ui avatar image" src="img/avatar/elliot.jpg">
-                <div class="content">
-                  <div class="header">Elliot Occupations</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui green circle icon"></i>
-                <img class="ui avatar image" src="img/avatar/matt.jpg">
-                <div class="content">
-                  <div class="header">Matt Donovan</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui circle thin icon"></i>
-                <img class="ui avatar image" src="img/avatar/jenny.jpg">
-                <div class="content">
-                  <div class="header">Jenny Lewis</div>
-                </div>
-              </div>
-
-              <div class="item chat">
-                <i class="right floated compact ui green circle icon"></i>
-                <img class="ui avatar image" src="img/avatar/joe.jpg">
-                <div class="content">
-                  <div class="header">Joe Henderson</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> 
-        <div class="ui segment" id="chatSegment" style="display:none; padding-top:0px;">
-          <i id="closeChat" class="right floated compact ui close icon link icon"></i>
-          <div class="small header" id="chatHeader"></div>
-        </div>
-      </div>
-      <!-- chat column end -->
     </div>
-  </div>
-  <!-- page grid end -->
+    <!-- card column end -->
+{% endblock %}
 
-  <!-- Modal -->
-  <div class="ui modal" id="commentWindowModel">
-    <div class="header">If You'd Like, Share Your Opinion!</div>
-    <div class="content">
-      <div class="ui small image">
-        <img src="img/interstellar1.jpg">
-      </div>
-      <div class="description" style="width:20%;">
-        <div class="ui medium header"><a class="ui link" href="filmProfile.html">Interstellar</a></div>
-        <div class="extra">
-          Your Rate: <span class="text" id="rating"></span>/10
+{% block main %}
+    <!-- main column -->
+    <div class="six wide column">
+        <div class="ui segment">
+            <div class="ui segment">
+                <div class="ui small header">
+                    Rate this movie:
+                </div>
+                <div class="ui huge rating" data-max-rating="10" id="commentWindow"></div>
+            </div>
+            <div class="ui segment">
+                <div class="ui vertical segment">
+                    <div class="ui small header">
+                        Description:
+                    </div>
+                </div>
+                <div class="ui vertical segment">
+                    {{ movie.description }}
+                </div>
+            </div>
+
+            <div class="ui segment">
+                <div class="ui vertical segment">
+                    <div class="ui small header">
+                        Cast:
+                    </div>
+                </div>
+                <div class="ui vertical segment">
+                    <div class="ui bulleted list">
+                        <div class="item">{{ movie.actor1.name }}</div>
+                        <div class="item">{{ movie.actor2.name }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui segment">
+                <div class="ui vertical segment">
+                    <div class="ui small header">
+                        Crew:
+                    </div>
+
+                </div>
+                <div class="ui vertical segment">
+                    <div class="ui bulleted list">
+                        <div class="item">{{ movie.director }} – director</div>
+                        <div class="item">{{ movie.writer }} – writer</div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-      </div>
-      <div class="ui form">
-        <h4 class="ui dividing header">Please Write Your Opinion </h4>
-        <div class="field">
-          <textarea></textarea>
-        </div>
-      </div>
-    </div>     
-    <div class="actions">
-      <div class="ui button">Cancel</div>
-      <div class="ui green button">Confirm</div>
     </div>
-  </div>
-  <!-- Modal end-->
-        
-<script>
+    <!-- main column end -->
+
+    <!-- Modal -->
+    <div class="ui modal" id="commentWindowModel">
+        <div class="header">If You'd Like, Share Your Opinion!</div>
+        <div class="content">
+            <div class="description" style="width:20%;">
+                <div class="ui medium header"><a class="ui link" href="/movie/{{ movie.id }}">{{ movie.name }}</a></div>
+                <div class="extra">
+                    Your Rate: <span class="text" id="rating"></span>/10
+                </div>
+                <div class="ui small image">
+                <img src="{% static "img/posters" %}/{{ movie.poster }}">
+            </div>
+            </div>
+            <div class="ui form">
+                <h4 class="ui dividing header">Please Write Your Opinion </h4>
+                <div class="field">
+                    <textarea></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui button">Cancel</div>
+            <div class="ui green button">Confirm</div>
+        </div>
+    </div>
+    <!-- Modal end-->
+{% endblock %}
+
+{% block scripts %}
+    $('.ui .rating').rating('enable');
     $('.ui .rating').rating('setting', 'clearable', true);
-    $('#notificationsItem').popup({
-    on: 'click',
-    inline: true,
-    transition: 'fade down'
-    });
-
-
-    var commentWindowLink = document.getElementById('commentWindow');
-    commentWindowLink.onclick = function()
-    {
-      var rateValue = $('#commentWindow').rating('get rating');
-      if (rateValue > 0)
-      {
-        $('#rating').text(rateValue);
-        $('#commentWindowModel').modal('show');
-      }
-      return false;
-    }
-
-    $('#searchIcon').click(
-    function()
-    {
-      $('#searchForm').submit();
-    }
-    );
-
-    var content = [
-  {
-    title: 'Steve Jobs',
-    description: 'User',
-  },
-  {
-    title: 'Steve Jobs',
-    description: 'Movie',
-  },
-  {
-    title: 'Inside Job',
-    description: 'Movie',
-  },
-  {
-    title: 'The Italian Job',
-    description: 'Movie',
-  },
-  {
-    title: 'Enter the Matrix',
-    description: 'Movie'
-  },
-  {
-    title: 'Matrix Reloaded',
-    description: 'Movie'
-  },
-  {
-    title: 'Matrix Revolutions',
-    description: 'Movie'
-  },
-  {
-    title: 'Steven Wilson',
-    description: 'User'
-  }
-  ];
-
-  $('.ui.search').search(
-  {
-    source: content,
-    searchFields: [ 'title' ],
-    transition: 'fade down'
-  }
-  );
-
-  var hell;
-    var chatOpen = false;
-    $('.chat').on("click", function(){
-      if (!chatOpen)
-      {
-        $('#chatSegment').show();
-        hell = $(this);
-        var name = $(this).children()[2].children[0].textContent;
-        $('#chatHeader').append(name);
-        chatOpen = true;
-        $('#chatSegment').append(
-          '<div class="ui message">\
-          Hello! You there?\
-        </div>'
-        );
-        $('#chatSegment').append(
-          '<div class="ui blue message">\
-          Well yes! How are you man?\
-        </div>'
-        );
-
-        $('#chatSegment').append(
-          '<form class="ui reply form commentForm">\
-          <div class="field">\
-            <div class="ui action input">\
-              <input type="text">\
-              <button class="ui small blue icon button commentButton" id="commentButton3">\
-                <i class="comment outline icon"></i>\
-              </button>\
-            </div>\
-          </div>\
-        </form>'
-        );
-      }
-    });
-
-    $('#closeChat').on("click", function(){
-      $('#chatSegment').hide();
-      chatOpen = false;
-      $('#chatHeader').text("");
-    });
-
-
-</script>
-</body>
-</html>
+{% endblock %}

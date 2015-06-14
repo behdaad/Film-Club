@@ -27,6 +27,7 @@ class Movie(models.Model):
     poster = models.CharField(max_length=127)  # including the extension
     rating = models.FloatField()
     rating_calculation_date = models.DateTimeField(default=datetime.datetime.now)
+    imdb_link = models.CharField(max_length=127)
 
     def __str__(self):
         return self.name

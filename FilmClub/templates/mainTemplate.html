@@ -121,11 +121,11 @@
                 <div class="ui divided items">
                     {% for movie in movies %}
                     <div class="item">
-                        <a class="ui inline link" href="/movies/{{ movie.id }}">
+                        <a class="ui inline link" href="/movie/{{ movie.id }}">
                             <img class="ui tiny left floated rounded bordered image" src="{% static "img/posters/" %}{{ movie.poster }}" alt="{{ movie.name }}" style="margin-bottom:6%;">
                         </a>
                         <div class="content">
-                            <a class="ui medium header" href="/movies/{{ movie.id }}">{{ movie.name }}</a>
+                            <a class="ui medium header" href="/movie/{{ movie.id }}">{{ movie.name }}</a>
                             <div class="meta">
                                 <span class="genre">{{ movie.genre }}</span>
                             </div>
@@ -148,14 +148,14 @@
                 <div class="ui divided list">
                 {% for user in users %}
                     <div class="item">
-                        <a href="/users/{{ user.id }}">
+                        <a href="/user/{{ user.id }}">
                             {% if user.has_avatar %}
                             <img class="ui tiny avatar left floated image" src="{% static "img/avatar" %}/avatar_{{ user.id }}.jpg">
                             {% else %}
                             <img class="ui tiny avatar left floated image" src="{% static "img/avatar/default.png" %}">
                             {% endif %}
                         </a>
-                        <a class="ui medium header" href="/users/{{ user.id }}">{{ user.user.first_name }} {{ user.user.last_name }}</a>
+                        <a class="ui medium header" href="/user/{{ user.id }}">{{ user.user.first_name }} {{ user.user.last_name }}</a>
                         <div class="content">
                             <a href="/follow/user/{{ user.id }}?next={{ request.path }}">
                                 <div class="ui tiny labeled icon button follow">
@@ -309,7 +309,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui segment" id="chatSegment" style="display:none; padding-top:0px;">
+            <div class="ui segment" id="chatSegment" style="display:none; padding-top:0;">
                 <i id="closeChat" class="right floated compact ui close icon link icon"></i>
                 <div class="small header" id="chatHeader"></div>
             </div>
@@ -319,5 +319,8 @@
 </div>
 <!-- page grid end -->
 <script src="{% static "js/scripts.js" %}"></script>
+<script>
+    {% block scripts %}
+    {% endblock %}
+</script>
 </body>
-</html>
