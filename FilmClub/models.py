@@ -51,6 +51,8 @@ class Post(models.Model):
     rating = models.IntegerField()
     movie = models.ForeignKey(Movie)
     review = models.TextField()
+    liked = models.BooleanField(default=False)  # liked by CURRENT LOGGED IN  USER
+    reason = models.CharField(default="", max_length=255)
 
     def __str__(self):
         return str(self.author) + ' (' + str(self.movie) + ')'
@@ -58,7 +60,7 @@ class Post(models.Model):
 
 class Like(models.Model):
     user = models.ForeignKey(ExtendedUser)
-    post = models.ForeignKey(Post)
+    post = models.ForeignKey(Post, related_name="likes")
     date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self):
@@ -67,7 +69,7 @@ class Like(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(ExtendedUser)
-    post = models.ForeignKey(Post)
+    post = models.ForeignKey(Post, related_name="comments")
     date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self):

@@ -27,26 +27,26 @@
             </p>
         </div>
 
-        {#        <!-- like segment -->#}
-        {#        <div class="ui vertical segment">#}
-        {#            <div class="ui grid">#}
-        {#                <div class="row">#}
-        {#                    <div class="eight wide column" style="padding-left: 15px; width: 120px !important;">#}
-        {#                        <div class="ui basic labeled left icon blue button likeButton" id="likeButton1">#}
-        {#                            <i class="thumbs outline up icon"></i>#}
-        {#                            Like#}
-        {#                        </div>#}
-        {#                    </div>#}
-        {#                    <div class="eight wide column">#}
-        {#                        <div class="ui mini horizontal statistic" style="margin-top: 5px;">#}
-        {#                            <div class="value likeCount" id="likeCount1">34</div>#}
-        {#                            <div class="label">people like this.</div>#}
-        {#                        </div>#}
-        {#                    </div>#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        </div>#}
-        {#        <!-- like segment end -->#}
+        <!-- like segment -->
+        <div class="ui vertical segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class="eight wide column" style="padding-left: 15px; width: 120px !important;">
+                        <div class="ui basic labeled left icon blue button likeButton" id="like_button_{{ post.id }}" onclick="like({{ post.id }})">
+                            <i class="thumbs outline up icon"></i>
+                            Like
+                        </div>
+                    </div>
+                    <div class="eight wide column">
+                        <div class="ui mini horizontal statistic" style="margin-top: 5px;">
+                            <div class="value likeCount" id="like_count_{{ post.id }}">{{ post.likes.count }}</div>
+                            <div class="label">people like this.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- like segment end -->
         {##}
         {#        <!-- comments segment -->#}
         {#        <div class="ui vertical segment">#}

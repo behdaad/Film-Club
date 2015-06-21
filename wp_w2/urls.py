@@ -18,20 +18,27 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
     url(r'^$', 'FilmClub.views.main'),
-    url(r'^follow/user/(?P<user_id>\d+)/$', 'FilmClub.views.follow'),
-    url(r'^unfollow/user/(?P<user_id>\d+)/$', 'FilmClub.views.unfollow'),
     url(r'^register/$', 'FilmClub.views.register'),
     url(r'^login/$', 'FilmClub.views.sign_in'),
     url(r'^logout/$', 'FilmClub.views.logout_user'),
     url(r'^search/$', 'FilmClub.views.search'),
-    url(r'^post/(?P<post_id>\d+)/$', 'FilmClub.views.single_post'),
+
     url(r'^user/(?P<user_id>\d+)/$', 'FilmClub.views.show_user'),
+    url(r'^user/(?P<user_id>\d+)/follow/$', 'FilmClub.views.follow'),
+    url(r'^user/(?P<user_id>\d+)/unfollow/$', 'FilmClub.views.unfollow'),
     url(r'^user/(?P<user_id>\d+)/followers/$', 'FilmClub.views.show_followers'),
     url(r'^user/(?P<user_id>\d+)/following/$', 'FilmClub.views.show_followings'),
+
     url(r'^movie/(?P<movie_id>\d+)/$', 'FilmClub.views.show_movie'),
-    url(r'^movie/(?P<movie_id>\d+)/submit_review$', 'FilmClub.views.submit_review'),
-    url(r'^movie/(?P<movie_id>\d+)/reviews$', 'FilmClub.views.show_reviews'),
+    url(r'^movie/(?P<movie_id>\d+)/submit_review/$', 'FilmClub.views.submit_review'),
+    url(r'^movie/(?P<movie_id>\d+)/reviews/$', 'FilmClub.views.show_reviews'),
+
+    url(r'^post/(?P<post_id>\d+)/$', 'FilmClub.views.single_post'),
+    url(r'^post/(?P<post_id>\d+)/like/$', 'FilmClub.views.like_post'),
+    url(r'^post/(?P<post_id>\d+)/unlike/$', 'FilmClub.views.unlike_post'),
+    url(r'^post/(?P<post_id>\d+)/comment/$', 'FilmClub.views.comment_on_post'),
 
 ]
 

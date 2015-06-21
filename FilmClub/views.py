@@ -6,6 +6,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
 
 # Create your views here.
 
@@ -67,17 +68,29 @@ def suggested_users(user):
 
 def fetch_posts(users):
     posts = []
+    print(users)
     for user in users:
         likes = Like.objects.filter(user=user)
         comments = Comment.objects.filter(user=user)
         reviews = Post.objects.filter(author=user)
 
-        for like in likes:
-            posts.append(like.post)
-        for comment in comments:
-            posts.append(comment.post)
         for review in reviews:
+            review.reason = review.author.display_name + " posted a review."
             posts.append(review)
+
+        for like in likes:
+            for post in posts:
+                if like.post == post:
+                    post.reason = like.user.display_name + " liked this."
+                    post.save()
+
+        duplicate = False
+        for comment in comments:
+            for like in likes:
+                if comment.post == like.post:
+                    if comment.date > like.date:
+                        comment.post.reason = comment.user.display_name + " commented on this."
+                        comment.save()
 
     posts.sort(key=lambda x: x.date)
     posts.reverse()
@@ -89,6 +102,17 @@ def main(request):
         followings = extended_user.following.all()
 
         posts = fetch_posts(followings)
+
+        for post in posts:
+            post.liked = False
+            post.save()
+
+        for post in posts:
+            for like in post.likes.all():
+                if like.user == extended_user:
+                    like.post.liked = True
+                    like.post.save()
+                    break
 
         return render(request, 'timeline.html', {
             'title': "Timeline",
@@ -102,7 +126,6 @@ def main(request):
         return render(request, 'login.html', {
             'title': "Login"
         })
-
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -173,7 +196,6 @@ def logout_user(request):
     logout(request)
     return redirect("/")
 
-
 def follow(request, user_id):
     user_id = int(user_id)
     follower_extended_user = ExtendedUser.objects.filter(user=request.user)[0]
@@ -181,7 +203,8 @@ def follow(request, user_id):
 
     follower_extended_user.following.add(followed_extended_user)
 
-    return redirect(request.GET['next'])
+    # return redirect(request.GET['next'])
+    return HttpResponse("OK")
 
 def unfollow(request, user_id):
     user_id = int(user_id)
@@ -190,7 +213,8 @@ def unfollow(request, user_id):
 
     unfollower_extended_user.following.remove(unfollowed_extended_user)
 
-    return redirect(request.GET['next'])
+    # return redirect(request.GET['next'])
+    return HttpResponse("OK")
 
 def search(request):
     query = request.GET['query'].lower()
@@ -220,7 +244,16 @@ def search(request):
     })
 
 def single_post(request, post_id):
-    post = Post.objects.filter(id=post_id)[0]
+    post = Post.objects.get(id=post_id)
+    post.liked = False
+    post.save()
+
+    for like in post.likes.all():
+        if like.user == ExtendedUser.objects.get(user=request.user):
+            post.liked = True
+            post.save()
+            break
+
     return render(request, 'single_post.html', {
         'title': "Single Post",
         'post': post,
@@ -234,6 +267,16 @@ def show_user(request, user_id):
     logged_in_extended_user = ExtendedUser.objects.filter(user=request.user)[0]
 
     posts = fetch_posts([target_user])
+    for post in posts:
+        post.liked = False
+        post.save()
+
+    for post in posts:
+        for like in post.likes.all():
+            if like.user == logged_in_extended_user:
+                like.post.liked = True
+                like.post.save()
+                break
 
     followings_count = len(target_user.following.all())
     followers_count = 0
@@ -342,6 +385,17 @@ def show_reviews(request, movie_id):
 
     posts = Post.objects.filter(movie=movie).order_by('-date')
 
+    for post in posts:
+        post.liked = False
+        post.save()
+
+    for post in posts:
+        for like in post.likes.all():
+            if like.user == ExtendedUser.objects.get(user=request.user):
+                like.post.liked = True
+                like.post.save()
+                break
+
     return render(request, 'movie_reviews.html', {
         'title': movie.name,
         'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
@@ -350,3 +404,30 @@ def show_reviews(request, movie_id):
         'movie': movie,
         'posts': posts,
     })
+
+def like_post(request, post_id):
+    target_post = Post.objects.filter(id=post_id)[0]
+    target_user = ExtendedUser.objects.filter(user=request.user)[0]
+    new_like = Like()
+    new_like.user = target_user
+    new_like.post = target_post
+    new_like.date = datetime.datetime.now()
+
+    new_like.save()
+
+    return HttpResponse("OK")
+
+def unlike_post(request, post_id):
+    target_post = Post.objects.filter(id=post_id)[0]
+    target_user = ExtendedUser.objects.filter(user=request.user)[0]
+    target_like = Like.objects.filter(post=target_post).filter(user=target_user)[0]
+
+    target_like.delete()
+
+    return HttpResponse("OK")
+
+def comment_on_post(request, post_id):
+    target_post = Post.objects.get(id=post_id)
+
+    new_comment = Comment()
+

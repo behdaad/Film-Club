@@ -257,32 +257,96 @@ $('.chat').on("click", function(){
 
 /* end chat JS */
 
-/* like/comment JS */
+/* movie review JS */
 
-var liked1 = false;
+$('.ui .rating').rating('setting', 'clearable', true);
 
-$('#likeButton1').click(
-    function()
+var commentWindowLink = document.getElementById('commentWindow');
+commentWindowLink.onclick = function()
+{
+    var rateValue = $('#commentWindow').rating('get rating');
+    if (rateValue > 0)
     {
-        var count1 = parseInt($('#likeCount1').text());
-        if (!liked1)
-        {
-            $('#likeCount1').text(String(count1 + 1));
-            liked1 = true;
-            $('#likeButton1').html(
-                '<i class="thumbs outline down icon"></i>Unlike'
-            );
-        }
-        else
-        {
-            $('#likeCount1').text(String(count1 - 1));
-            liked1 = false;
-            $('#likeButton1').html(
-                '<i class="thumbs outline up icon"></i>Like'
-            );
-        }
+        $('#rating').text(rateValue);
+        $('#rating_hidden_input').attr('value', rateValue);
+        $('#reviewModal')
+            .modal({
+                onApprove: function() {
+                    $('#review_form').submit();
+                }
+            })
+            .modal('show');
     }
-);
+    return false;
+};
+
+/* end movie review JS */
+
+/* like/unlike JS */
+
+function like(post_id)
+{
+    console.log(post_id);
+    //console.log(type(post_id));
+    //console.log(post_id);
+
+    var target_url = '/post/' + post_id + '/like/';
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', target_url);
+
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState === 4)
+        {
+            if(xhr.status === 200)
+            {
+                var like_button_css_path = '#like_button_' + post_id;
+                var target_element = $(like_button_css_path);
+                var t = "unlike(" + post_id + ")";
+                target_element.attr("onclick", t);
+                target_element.html('<i class="thumbs outline down icon"></i>Unlike');
+
+                var like_count_css_path = '#like_count_' + post_id;
+                var count1 = parseInt($(like_count_css_path).text());
+                $(like_count_css_path).text(String(count1 + 1));
+            }
+        }
+    };
+    xhr.send(null);
+}
+
+function unlike(post_id)
+{
+    var target_url = '/post/' + post_id + '/unlike/';
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', target_url);
+
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState === 4)
+        {
+            if(xhr.status === 200)
+            {
+                var target_css_path = '#like_button_' + post_id;
+                var target_element = $(target_css_path);
+
+                target_element.html('<i class="thumbs outline up icon"></i>Like');
+                var t = "like(" + post_id + ")";
+                target_element.attr("onclick", t);
+
+                var like_count_css_path = '#like_count_' + post_id;
+                var count1 = parseInt($(like_count_css_path).text());
+                $(like_count_css_path).text(String(count1 - 1));
+            }
+        }
+    };
+    xhr.send(null);
+}
+
+/* like/unlike JS end */
+
+/* comment JS */
+
 
 $('#commentButton1').click(
     function()
@@ -314,137 +378,108 @@ $('#commentButton1').click(
     }
 );
 
-var liked2 = false;
-$('#likeButton2').click(
-    function()
-    {
-        var count2 = parseInt($('#likeCount2').text());
-        if (!liked2)
-        {
-            $('#likeCount2').text(String(count2 + 1));
-            liked2 = true;
-            $('#likeButton2').html(
-                '<i class="thumbs outline down icon"></i>Unlike'
-            );
-        }
-        else
-        {
-            $('#likeCount2').text(String(count2 - 1));
-            liked2 = false;
-            $('#likeButton2').html(
-                '<i class="thumbs outline up icon"></i>Like'
-            );
-        }
-    }
-);
+/* comment JS end */
 
-$('#commentButton2').click(
-    function()
-    {
-        var text = $('#commentText2').val(); // comment text
-        if (text !== "")
-        {
-            $('#comments2').prepend(
+/* follow/unfollow JS */
 
-                '<div class="comment"> \
-                <a class="avatar"> \
-                  <img src="img/avatar/steve.jpg"> \
-                </a> \
-                <div class="content"> \
-                  <a class="author" href="userProfile.html">Steve Jobs</a> \
-                  <div class="metadata"> \
-                    <span class="date">Just Now</span> \
-                  </div> \
-                  <div class="text">'
-                + text +
-                '</div> \
-              </div> \
-            </div>');
-            $('#commentText2').val("");
-            var cmntCnt2 = parseInt($('#commentsCount2').text()) + 1;
-            $('#commentsCount2').text(String(cmntCnt2));
-        }
-        return false;
-    }
-);
-
-var liked3 = false;
-$('#likeButton3').click(
-    function()
-    {
-        var count3 = parseInt($('#likeCount3').text());
-        if (!liked3)
-        {
-            $('#likeCount3').text(String(count3 + 1));
-            liked3 = true;
-            $('#likeButton3').html(
-                '<i class="thumbs outline down icon"></i>Unlike'
-            );
-        }
-        else
-        {
-            $('#likeCount3').text(String(count3 - 1));
-            liked3 = false;
-            $('#likeButton3').html(
-                '<i class="thumbs outline up icon"></i>Like'
-            );
-        }
-    }
-);
-
-$('#commentButton3').click(
-    function()
-    {
-        var text = $('#commentText3').val(); // comment text
-        if (text !== "")
-        {
-            $('#comments3').prepend(
-
-                '<div class="comment"> \
-                <a class="avatar"> \
-                  <img src="img/avatar/steve.jpg"> \
-                </a> \
-                <div class="content"> \
-                  <a class="author" href="userProfile.html">Steve Jobs</a> \
-                  <div class="metadata"> \
-                    <span class="date">Just Now</span> \
-                  </div> \
-                  <div class="text">'
-                + text +
-                '</div> \
-              </div> \
-            </div>');
-            $('#commentText3').val("");
-            var cmntCnt3 = parseInt($('#commentsCount3').text()) + 1;
-            $('#commentsCount3').text(String(cmntCnt3));
-        }
-        return false;
-    }
-);
-
-/* end like/comment JS */
-
-/* movie review JS */
-
-$('.ui .rating').rating('setting', 'clearable', true);
-
-var commentWindowLink = document.getElementById('commentWindow');
-commentWindowLink.onclick = function()
+function follow(user_id)
 {
-    var rateValue = $('#commentWindow').rating('get rating');
-    if (rateValue > 0)
-    {
-        $('#rating').text(rateValue);
-        $('#rating_hidden_input').attr('value', rateValue);
-        $('#reviewModal')
-            .modal({
-                onApprove: function() {
-                    $('#review_form').submit();
-                }
-            })
-            .modal('show');
-    }
-    return false;
-};
+    var target_url = '/user/' + user_id + '/follow/';
+    var xhr = new XMLHttpRequest();
 
-/* end movie review JS */
+    xhr.open('get', target_url);
+
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState === 4)
+        {
+            if(xhr.status === 200)
+            {
+                var target_css_path = '#follow_button_' + user_id;
+                var target_element = $(target_css_path);
+
+                target_element.html('<div class="ui tiny labeled icon red button" onclick="unfollow({{ user.id }})"><i class="remove user icon"></i>Unfollow</div>');
+                var t = "unfollow(" + user_id + ")";
+                target_element.attr("onclick", t);
+            }
+        }
+    };
+    xhr.send(null);
+}
+
+function unfollow(user_id)
+{
+    var target_url = '/user/' + user_id + '/unfollow/';
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('get', target_url);
+
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState === 4)
+        {
+            if(xhr.status === 200)
+            {
+                var target_css_path = '#follow_button_' + user_id;
+                var target_element = $(target_css_path);
+
+                target_element.html('<div class="ui tiny labeled icon button" onclick="follow({{ user.id }})"><i class="add user icon"></i>Follow</div>');
+                var t = "follow(" + user_id + ")";
+                target_element.attr("onclick", t);
+            }
+        }
+    };
+    xhr.send(null);
+}
+
+function follow_profile(user_id)
+{
+    var target_url = '/user/' + user_id + '/follow/';
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('get', target_url);
+
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState === 4)
+        {
+            if(xhr.status === 200)
+            {
+                var target_css_path = '#follow_button_profile_' + user_id;
+                var target_element = $(target_css_path);
+
+                target_element.html('<div class="ui red labeled icon button" style="width:62%;"><i class="remove user icon"></i>Unfollow</div>');
+                var t = "unfollow_profile(" + user_id + ")";
+                target_element.attr("onclick", t);
+            }
+        }
+    };
+    xhr.send(null);
+}
+
+function unfollow_profile(user_id)
+{
+    var target_url = '/user/' + user_id + '/unfollow/';
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('get', target_url);
+
+    xhr.onreadystatechange = function()
+    {
+        if(xhr.readyState === 4)
+        {
+            if(xhr.status === 200)
+            {
+                var target_css_path = '#follow_button_profile_' + user_id;
+                var target_element = $(target_css_path);
+
+                target_element.html('<div class="ui labeled icon button" style="width:62%;" ><i class="add user icon"></i>Follow</div>');
+                var t = "follow_profile(" + user_id + ")";
+                target_element.attr("onclick", t);
+            }
+        }
+    };
+    xhr.send(null);
+}
+
+/* follow/unfollow JS end */

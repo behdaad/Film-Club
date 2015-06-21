@@ -50,7 +50,6 @@
             <!-- login form -->
             <form class="ui form segment" action="/login/" method="post" id="loginForm">
                 {% csrf_token %}
-                <div class="ui error message"></div>
                 <div class="left icon field">
                     <label>Username</label>
                     <div class="ui left icon input">
@@ -67,6 +66,7 @@
                 </div>
                 <div class="ui blue submit button">Login</div>
                 <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                <div class="ui error message"></div>
             </form>
             <!-- login form end -->
 
