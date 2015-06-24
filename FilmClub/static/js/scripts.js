@@ -286,10 +286,6 @@ commentWindowLink.onclick = function()
 
 function like(post_id)
 {
-    console.log(post_id);
-    //console.log(type(post_id));
-    //console.log(post_id);
-
     var target_url = '/post/' + post_id + '/like/';
     var xhr = new XMLHttpRequest();
     xhr.open('get', target_url);
@@ -345,41 +341,6 @@ function unlike(post_id)
 
 /* like/unlike JS end */
 
-/* comment JS */
-
-
-$('#commentButton1').click(
-    function()
-    {
-        var text = $('#commentText1').val(); // comment text
-        if (text !== "")
-        {
-            $('#comments1').prepend(
-
-                '<div class="comment"> \
-                <a class="avatar"> \
-                  <img src="img/avatar/steve.jpg"> \
-                </a> \
-                <div class="content"> \
-                  <a class="author" href="userProfile.html">Steve Jobs</a> \
-                  <div class="metadata"> \
-                    <span class="date">Just Now</span> \
-                  </div> \
-                  <div class="text">'
-                + text +
-                '</div> \
-              </div> \
-            </div>');
-            $('#commentText1').val("");
-            var cmntCnt1 = parseInt($('#commentsCount1').text()) + 1;
-            $('#commentsCount1').text(String(cmntCnt1));
-        }
-        return false;
-    }
-);
-
-/* comment JS end */
-
 /* follow/unfollow JS */
 
 function follow(user_id)
@@ -391,9 +352,9 @@ function follow(user_id)
 
     xhr.onreadystatechange = function()
     {
-        if(xhr.readyState === 4)
+        if (xhr.readyState === 4)
         {
-            if(xhr.status === 200)
+            if (xhr.status === 200)
             {
                 var target_css_path = '#follow_button_' + user_id;
                 var target_element = $(target_css_path);

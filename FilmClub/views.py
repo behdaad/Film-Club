@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -68,7 +70,6 @@ def suggested_users(user):
 
 def fetch_posts(users):
     posts = []
-    print(users)
     for user in users:
         likes = Like.objects.filter(user=user)
         comments = Comment.objects.filter(user=user)
@@ -79,20 +80,34 @@ def fetch_posts(users):
             posts.append(review)
 
         for like in likes:
+            already_added = False
             for post in posts:
                 if like.post == post:
                     post.reason = like.user.display_name + " liked this."
                     post.save()
+                    already_added = True
+                    break
+            if not already_added:
+                posts.append(like.post)
 
-        duplicate = False
         for comment in comments:
-            for like in likes:
-                if comment.post == like.post:
-                    if comment.date > like.date:
-                        comment.post.reason = comment.user.display_name + " commented on this."
-                        comment.save()
+            already_added = False
+            for post in posts:
+                if comment.post == post:
+                    post.reason = comment.user.display_name + " commented on this."
+                    post.save()
+                    already_added = True
+                    break
+            if not already_added:
+                posts.append(comment.post)
 
-    posts.sort(key=lambda x: x.date)
+            # for like in likes:
+            #     if comment.post == like.post:
+            #         if comment.date > like.date:
+            #             comment.post.reason = comment.user.display_name + " commented on this."
+            #             comment.post.save()
+
+    posts.sort(key=lambda x: x.last_event)
     posts.reverse()
     return posts
 
@@ -407,11 +422,15 @@ def show_reviews(request, movie_id):
 
 def like_post(request, post_id):
     target_post = Post.objects.filter(id=post_id)[0]
+    target_post.last_event = datetime.datetime.now()
+    target_post.save()
+
     target_user = ExtendedUser.objects.filter(user=request.user)[0]
+
     new_like = Like()
     new_like.user = target_user
     new_like.post = target_post
-    new_like.date = datetime.datetime.now()
+    new_like.date = target_post.last_event
 
     new_like.save()
 
@@ -424,10 +443,33 @@ def unlike_post(request, post_id):
 
     target_like.delete()
 
+    latest_like_date = target_post.likes.order_by('-date')[0].date
+    latest_comment_date = target_post.comments.order_by('-date')[0].date
+
+    if latest_comment_date < latest_like_date:
+        target_post.last_event = latest_like_date
+    else:
+        target_post.last_event = latest_comment_date
+
+    target_post.save()
+
     return HttpResponse("OK")
 
+@login_required
+@csrf_exempt
 def comment_on_post(request, post_id):
+    print("comment")
     target_post = Post.objects.get(id=post_id)
+    target_post.last_event = datetime.datetime.now()
+    target_post.save()
 
     new_comment = Comment()
+    new_comment.date = target_post.last_event
+    new_comment.post = target_post
+    new_comment.user = ExtendedUser.objects.get(user=request.user)
+    new_comment.text = request.POST['comment_text']
+
+    new_comment.save()
+
+    return HttpResponse("OK")
 

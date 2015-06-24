@@ -47,7 +47,8 @@ class ExtendedUser(models.Model):
 
 class Post(models.Model):
     author = models.ForeignKey(ExtendedUser)
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=datetime.datetime.now)
+    last_event = models.DateTimeField(default=datetime.datetime.now)
     rating = models.IntegerField()
     movie = models.ForeignKey(Movie)
     review = models.TextField()
@@ -71,6 +72,7 @@ class Comment(models.Model):
     user = models.ForeignKey(ExtendedUser)
     post = models.ForeignKey(Post, related_name="comments")
     date = models.DateTimeField(default=datetime.datetime.now)
+    text = models.CharField(default="", max_length=1023)
 
     def __str__(self):
         return str(self.user) + " commented on " + str(self.post)
