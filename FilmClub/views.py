@@ -12,6 +12,16 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+def calculate_rating(movie_id):
+    movie = Movie.objects.get(id=movie_id)
+    reviews = Post.objects.filter(movie=movie)
+    sum = 0
+    size = len(reviews)
+    for r in reviews:
+        sum += r.rating
+    movie.rating = round(sum / size, 2)
+    movie.save()
+
 def suggested_movies(user):
     #  update ratings of movies to suggest
     #  don't forget .save()
@@ -33,6 +43,9 @@ def suggested_movies(user):
     # randoms contains 3 different random numbers
 
     all_movies = Movie.objects.all()
+    for i in randoms:
+        calculate_rating(all_movies[i].id)
+
     return [all_movies[randoms[0]], all_movies[randoms[1]], all_movies[randoms[2]]]
 
 def suggested_users(user):
@@ -111,12 +124,15 @@ def fetch_posts(users):
     posts.reverse()
     return posts
 
-def main(request):
+def main(request, page=1):
+    page = int(page)
+    if page < 0:
+        return HttpResponse("Error")
     if request.user.is_authenticated():
         extended_user = ExtendedUser.objects.filter(user=request.user)[0]
         followings = extended_user.following.all()
 
-        posts = fetch_posts(followings)
+        posts = fetch_posts(followings)[(page - 1) * 10: page * 10 + 1]
 
         for post in posts:
             post.liked = False
@@ -129,10 +145,25 @@ def main(request):
                     like.post.save()
                     break
 
-        return render(request, 'timeline.html', {
+        has_older = False
+        older_page = page - 1
+        if page != 1:
+            has_older = True
+
+        has_newer = True
+        newer_page = page + 1
+        if len(posts) != 11:
+            has_newer = False
+
+        return render(request, 'timeline.html',
+        {
             'title': "Timeline",
             'page': "timeline",
             'posts': posts,
+            'has_older': has_older,
+            'has_newer': has_newer,
+            'older_page': older_page,
+            'newer_page': newer_page,
             'movies': suggested_movies(request.user),
             'users': suggested_users(request.user),
             'logged_in': extended_user,
@@ -207,10 +238,12 @@ def sign_in(request):
             'sign_up': False,
         })
 
+@login_required
 def logout_user(request):
     logout(request)
     return redirect("/")
 
+@login_required
 def follow(request, user_id):
     user_id = int(user_id)
     follower_extended_user = ExtendedUser.objects.filter(user=request.user)[0]
@@ -221,6 +254,7 @@ def follow(request, user_id):
     # return redirect(request.GET['next'])
     return HttpResponse("OK")
 
+@login_required
 def unfollow(request, user_id):
     user_id = int(user_id)
     unfollower_extended_user = ExtendedUser.objects.filter(user=request.user)[0]
@@ -231,6 +265,7 @@ def unfollow(request, user_id):
     # return redirect(request.GET['next'])
     return HttpResponse("OK")
 
+@login_required
 def search(request):
     query = request.GET['query'].lower()
     extended_users = ExtendedUser.objects.all()
@@ -247,7 +282,10 @@ def search(request):
     movie_results = []
     for m in movies:
         if query in m.name.lower():
+            calculate_rating(m.id)
             movie_results.append(m)
+
+    # print(user_results[0].posts.all())
 
     return render(request, 'search.html', {
         'title': "Search",
@@ -258,6 +296,7 @@ def search(request):
         'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
     })
 
+@login_required
 def single_post(request, post_id):
     post = Post.objects.get(id=post_id)
     post.liked = False
@@ -277,11 +316,12 @@ def single_post(request, post_id):
         'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
     })
 
+@login_required
 def show_user(request, user_id):
-    target_user = ExtendedUser.objects.filter(id=user_id)[0]
+    target_user = ExtendedUser.objects.get(id=user_id)
     logged_in_extended_user = ExtendedUser.objects.filter(user=request.user)[0]
 
-    posts = fetch_posts([target_user])
+    posts = Post.objects.filter(author=target_user)
     for post in posts:
         post.liked = False
         post.save()
@@ -320,6 +360,7 @@ def show_user(request, user_id):
     else:
         return render(request, 'not_following_profile.html', dictionary)
 
+@login_required
 def show_followers(request, user_id):
     target_user = ExtendedUser.objects.filter(id=user_id)[0]
 
@@ -347,6 +388,7 @@ def show_followers(request, user_id):
         'followers_count': followers_count,
     })
 
+@login_required
 def show_followings(request, user_id):
     target_user = ExtendedUser.objects.filter(id=user_id)[0]
     users_list = target_user.following.all()
@@ -370,8 +412,10 @@ def show_followings(request, user_id):
         'followers_count': followers_count,
     })
 
+@login_required
 def show_movie(request, movie_id):
     movie = Movie.objects.filter(id=movie_id)[0]
+    calculate_rating(movie.id)
 
     return render(request, 'filmProfile.html', {
         'title': movie.name,
@@ -381,6 +425,7 @@ def show_movie(request, movie_id):
         'movie': movie,
     })
 
+@login_required
 def submit_review(request, movie_id):
     movie = Movie.objects.filter(id=movie_id)[0]
 
@@ -393,10 +438,12 @@ def submit_review(request, movie_id):
 
     new_post.save()
 
-    return redirect('/movie/' + str(movie_id) + '/reviews')
+    return redirect('/movie/' + str(movie_id) + '/reviews/')
 
+@login_required
 def show_reviews(request, movie_id):
-    movie = Movie.objects.filter(id=movie_id)[0]
+    movie = Movie.objects.get(id=movie_id)
+    calculate_rating(movie.id)
 
     posts = Post.objects.filter(movie=movie).order_by('-date')
 
@@ -420,6 +467,7 @@ def show_reviews(request, movie_id):
         'posts': posts,
     })
 
+@login_required
 def like_post(request, post_id):
     target_post = Post.objects.filter(id=post_id)[0]
     target_post.last_event = datetime.datetime.now()
@@ -436,15 +484,39 @@ def like_post(request, post_id):
 
     return HttpResponse("OK")
 
+@login_required
 def unlike_post(request, post_id):
     target_post = Post.objects.filter(id=post_id)[0]
     target_user = ExtendedUser.objects.filter(user=request.user)[0]
-    target_like = Like.objects.filter(post=target_post).filter(user=target_user)[0]
+    target_like = Like.objects.filter(post=target_post).filter(user=target_user)
 
-    target_like.delete()
+    if len(target_like) == 1:
+        target_like.delete()
+    else:
+        return HttpResponse("Error")
 
-    latest_like_date = target_post.likes.order_by('-date')[0].date
+    previous_likes = target_post.likes.all()
+    previous_comments = target_post.comments.all()
+
+    if len(previous_likes) == 0 and len(previous_comments) == 0:
+        target_post.last_event = target_post.date
+        target_post.save()
+        return HttpResponse("OK")
+
+    if len(previous_likes) > 0 and len(previous_comments) == 0:
+        latest_like_date = target_post.likes.order_by('-date')[0].date
+        target_post.last_event = latest_like_date
+        target_post.save()
+        return HttpResponse("OK")
+
+    if len(previous_comments) > 0 and len(previous_likes) == 0:
+        latest_comment_date = target_post.comments.order_by('-date')[0].date
+        target_post.last_event = latest_comment_date
+        target_post.save()
+        return HttpResponse("OK")
+
     latest_comment_date = target_post.comments.order_by('-date')[0].date
+    latest_like_date = target_post.likes.order_by('-date')[0].date
 
     if latest_comment_date < latest_like_date:
         target_post.last_event = latest_like_date
@@ -458,18 +530,21 @@ def unlike_post(request, post_id):
 @login_required
 @csrf_exempt
 def comment_on_post(request, post_id):
-    print("comment")
-    target_post = Post.objects.get(id=post_id)
-    target_post.last_event = datetime.datetime.now()
-    target_post.save()
+    # print("comment")
+    if request.POST['comment_text'] != "":
+        target_post = Post.objects.get(id=post_id)
+        target_post.last_event = datetime.datetime.now()
+        target_post.save()
 
-    new_comment = Comment()
-    new_comment.date = target_post.last_event
-    new_comment.post = target_post
-    new_comment.user = ExtendedUser.objects.get(user=request.user)
-    new_comment.text = request.POST['comment_text']
+        new_comment = Comment()
+        new_comment.date = target_post.last_event
+        new_comment.post = target_post
+        new_comment.user = ExtendedUser.objects.get(user=request.user)
+        new_comment.text = request.POST['comment_text']
 
-    new_comment.save()
+        new_comment.save()
 
-    return HttpResponse("OK")
+        return HttpResponse("OK")
+    else:
+        return HttpResponse("Empty comment; not submitted")
 

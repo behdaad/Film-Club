@@ -32,10 +32,17 @@
             <div class="ui grid">
                 <div class="row">
                     <div class="eight wide column" style="padding-left: 15px; width: 120px !important;">
-                        <div class="ui basic labeled left icon blue button likeButton" id="like_button_{{ post.id }}" onclick="like({{ post.id }})">
-                            <i class="thumbs outline up icon"></i>
-                            Like
-                        </div>
+                        {% if post.liked %}
+                            <div class="ui basic labeled left icon blue button likeButton" id="like_button_{{ post.id }}" onclick="unlike({{ post.id }})">
+                                <i class="thumbs outline down icon"></i>
+                                Unlike
+                            </div>
+                        {% else %}
+                            <div class="ui basic labeled left icon blue button likeButton" id="like_button_{{ post.id }}" onclick="like({{ post.id }})">
+                                <i class="thumbs outline up icon"></i>
+                                Like
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="eight wide column">
                         <div class="ui mini horizontal statistic" style="margin-top: 5px;">
@@ -47,67 +54,135 @@
             </div>
         </div>
         <!-- like segment end -->
-        {##}
-        {#        <!-- comments segment -->#}
-        {#        <div class="ui vertical segment">#}
-        {#            <form class="ui reply form commentForm">#}
-        {#                <div class="field">#}
-        {#                    <div class="ui action input">#}
-        {#                        <input type="text" placeholder="Type your comment..." id="commentText1">#}
-        {#                        <button class="ui small blue right labeled icon button commentButton" id="commentButton1">#}
-        {#                            <i class="comment outline icon"></i>#}
-        {#                            Comment#}
-        {#                        </button>#}
-        {#                    </div>#}
-        {#                </div>#}
-        {#            </form>#}
-        {#            <h4 class="ui dividing header"><span id="commentsCount1">3</span> Comments</h4>#}
-        {#            <div class="ui comments" id="comments1">#}
-        {#                <div class="comment">#}
-        {#                    <a href="userProfile.html" class="avatar">#}
-        {#                        <img src="img/avatar/matt.jpg">#}
-        {#                    </a>#}
-        {#                    <div class="content">#}
-        {#                        <a class="author" href="userProfile.html">Matt Telbas</a>#}
-        {#                        <div class="metadata">#}
-        {#                            <span class="date">Today at 5:42PM</span>#}
-        {#                        </div>#}
-        {#                        <div class="text">#}
-        {#                            How artistic!#}
-        {#                        </div>#}
-        {#                    </div>#}
-        {#                </div>#}
-        {#                <div class="comment">#}
-        {#                    <a href="userProfile.html" class="avatar">#}
-        {#                        <img src="img/avatar/jenny.jpg">#}
-        {#                    </a>#}
-        {#                    <div class="content">#}
-        {#                        <a class="author"  href="userProfile.html">Jenny Hess</a>#}
-        {#                        <div class="metadata">#}
-        {#                            <span class="date">Yesterday at 12:30AM</span>#}
-        {#                        </div>#}
-        {#                        <div class="text">#}
-        {#                            <p>This has been very useful for my "research". Thanks as well!</p>#}
-        {#                        </div>#}
-        {#                    </div>#}
-        {#                </div>#}
-        {#                <div class="comment">#}
-        {#                    <a href="userProfile.html" class="avatar">#}
-        {#                        <img src="img/avatar/joe.jpg">#}
-        {#                    </a>#}
-        {#                    <div class="content">#}
-        {#                        <a class="author"  href="userProfile.html">Joe Henderson</a>#}
-        {#                        <div class="metadata">#}
-        {#                            <span class="date">5 days ago</span>#}
-        {#                        </div>#}
-        {#                        <div class="text">#}
-        {#                            Dude, this is awesome. Thanks so much#}
-        {#                        </div>#}
-        {#                    </div>#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        </div>#}
-        {#        <!-- comments segment end -->#}
+
+        <!-- comments segment -->
+        <div class="ui vertical segment">
+            <div class="ui reply form">
+                <div class="field">
+                    <div class="ui action input">
+                        <input onkeypress="comment_input(event, {{ post.id }}, {{ logged_in.id }}, '{{ logged_in.display_name }}')" class="comment_input" type="text" placeholder="Type your comment..." id="comment_text_{{ post.id }}" name="comment_text">
+                        <div class="ui small blue right labeled icon button" onclick="comment({{ post.id }}, {{  logged_in.id }}, '{{ logged_in.display_name }}')">
+                            <i class="comment outline icon"></i>
+                            Comment
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="ui dividing header"><span id="comments_count_{{ post.id }}">{{ post.comments.count }}</span> Comments</h4>
+            <div class="ui comments" id="comments_section_{{ post.id }}">
+                {% for comment in post.comments.all %}
+                    <div class="comment">
+                        <a href="/user/{{ comment.user.id }}" class="avatar">
+                            <img src="{% static "img/avatar" %}/avatar_{{ comment.user.id }}.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="author" href="/user/{{ comment.user.id }}">{{ comment.user.display_name }}</a>
+                            <div class="metadata">
+                                <span class="date">{{ comment.date }}</span>
+                            </div>
+                            <div class="text">
+                                {{ comment.text }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- comments segment end -->
     </div>
 {% endblock %}
 <!-- page grid end -->
+
+{% block scripts %}
+
+    /* comment JS */
+
+        function comment(post_id, user_id, display_name)
+    {
+        var target_url = '/post/' + post_id + '/comment/';
+        var comment_text = $("#comment_text_" + post_id).val();
+        // console.log(comment_text);
+        if (comment_text !== "")
+        {
+            $.post(target_url,
+                {
+                    comment_text: comment_text
+                },
+                function(data, status)
+                {
+                    // alert('success! data: ' + data);
+                }
+            );
+            var target_user_url = "/user/" + user_id;
+            $('#comments_section_' + post_id).prepend(
+                '<div class="comment">' +
+                '<a href="' + target_user_url + '" class="avatar">' +
+                '<img src="' + '{% static "img/avatar" %}' + '/avatar_' + user_id + '.jpg">' +
+                '</a>' +
+                '<div class="content">' +
+                '<a class="author" href="/user/' + user_id + '">' + display_name + '</a>' +
+                '<div class="metadata">' +
+                '<span class="date">Just now</span>' +
+                '</div>' +
+                '<div class="text">' +
+                comment_text +
+                '</div>' +
+                '</div>' +
+                '</div>'
+            );
+            var comments_count_element = $("#comments_count_" + post_id);
+            var comments_count = parseInt(comments_count_element.text()) + 1;
+            comments_count_element.text(comments_count);
+            comment_text = $("#comment_text_" + post_id).val("")
+            return false;
+        }
+    }
+
+    function comment_input(event, post_id, user_id, display_name)
+    {
+        // alert("khafan func called");
+        if (event.keyCode === 13)
+        {
+            var target_url = '/post/' + post_id + '/comment/';
+            var comment_text = $("#comment_text_" + post_id).val();
+            // console.log(comment_text);
+            if (comment_text !== "")
+            {
+                $.post(target_url,
+                    {
+                        comment_text: comment_text
+                    },
+                    function(data, status)
+                    {
+                        // alert('success! data: ' + data);
+                    }
+                );
+                var target_user_url = "/user/" + user_id;
+                $('#comments_section_' + post_id).prepend(
+                    '<div class="comment">' +
+                    '<a href="' + target_user_url + '" class="avatar">' +
+                    '<img src="' + '{% static "img/avatar" %}' + '/avatar_' + user_id + '.jpg">' +
+                    '</a>' +
+                    '<div class="content">' +
+                    '<a class="author" href="/user/' + user_id + '">' + display_name + '</a>' +
+                    '<div class="metadata">' +
+                    '<span class="date">Just now</span>' +
+                    '</div>' +
+                    '<div class="text">' +
+                    comment_text +
+                    '</div>' +
+                    '</div>' +
+                    '</div>'
+                );
+                var comments_count_element = $("#comments_count_" + post_id);
+                var comments_count = parseInt(comments_count_element.text()) + 1;
+                comments_count_element.text(comments_count);
+                comment_text = $("#comment_text_" + post_id).val("");
+                return false;
+            }
+        }
+    }
+
+
+    /* comment JS end */
+{% endblock %}

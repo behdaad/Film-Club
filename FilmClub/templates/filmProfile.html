@@ -75,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            <form class="ui form" method="post" action="/movie/{{ movie.id }}/submit_review" id="review_form">
+            <form class="ui form" method="post" action="/movie/{{ movie.id }}/submit_review/" id="review_form">
                 {% csrf_token %}
                 <div class="field">
                     <label for="textarea">Please Write Your Opinion</label>

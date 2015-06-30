@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^login/$', 'FilmClub.views.sign_in'),
     url(r'^logout/$', 'FilmClub.views.logout_user'),
     url(r'^search/$', 'FilmClub.views.search'),
+    url(r'^timeline/(?P<page>\d+)', 'FilmClub.views.main'),
 
     url(r'^user/(?P<user_id>\d+)/$', 'FilmClub.views.show_user'),
     url(r'^user/(?P<user_id>\d+)/follow/$', 'FilmClub.views.follow'),

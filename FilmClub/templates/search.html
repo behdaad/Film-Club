@@ -46,7 +46,7 @@
                 </a>
                 <a class="ui medium header" href="/user/{{ user.id }}">{{ user.user.first_name }} {{ user.user.last_name }}</a>
                 <div class="content">
-                    Age: EDIT
+                    Posts: {{ user.posts.all|length }}
                 </div>
             </div>
         {% endfor %}

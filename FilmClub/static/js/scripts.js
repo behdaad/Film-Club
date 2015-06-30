@@ -271,8 +271,13 @@ commentWindowLink.onclick = function()
         $('#rating_hidden_input').attr('value', rateValue);
         $('#reviewModal')
             .modal({
-                onApprove: function() {
+                onApprove: function()
+                {
                     $('#review_form').submit();
+                },
+                onDeny: function()
+                {
+                    $('.ui .rating').rating('clear rating');
                 }
             })
             .modal('show');

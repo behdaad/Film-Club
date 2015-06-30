@@ -26,7 +26,7 @@ class Movie(models.Model):
     releaseDate = models.DateField()
     poster = models.CharField(max_length=127)  # including the extension
     rating = models.FloatField()
-    rating_calculation_date = models.DateTimeField(default=datetime.datetime.now)
+    # rating_calculation_date = models.DateTimeField(default=datetime.datetime.now)
     imdb_link = models.CharField(max_length=127)
 
     def __str__(self):
@@ -46,7 +46,7 @@ class ExtendedUser(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(ExtendedUser)
+    author = models.ForeignKey(ExtendedUser, related_name="posts")
     date = models.DateTimeField(default=datetime.datetime.now)
     last_event = models.DateTimeField(default=datetime.datetime.now)
     rating = models.IntegerField()
