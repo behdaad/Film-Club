@@ -20,7 +20,7 @@
         </div>
         <div class="ui vertical segment">
             <a href="movie/{{ post.movie.id }}">
-                <img class="ui small left floated top aligned rounded bordered image" alt="{{ post.movie.name }}" src="{% static 'img/posters' %}/{{ post.movie.poster }}" />
+                <img class="ui small left floated top aligned rounded bordered image" alt="{{ post.movie.name }}" src="{{ post.movie.poster.url }}" />
             </a>
             <p>
                 {{ post.review }}

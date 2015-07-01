@@ -14,7 +14,7 @@
         {% for movie in movie_results %}
             <div class="item">
                 <a class="ui inline link" href="/movie/{{ movie.id }}">
-                    <img class="ui tiny left floated rounded bordered image" src="{% static "img/posters" %}/{{ movie.poster }}" alt="{{ movie.name }}" >
+                    <img class="ui tiny left floated rounded bordered image" src="{{ movie.poster.url }}" alt="{{ movie.name }}" >
                 </a>
                 <div class="content">
                     <a class="ui medium header" href="/movie/{{ movie.id }}">{{ movie.name }}</a>

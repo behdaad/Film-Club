@@ -210,8 +210,6 @@ def register(request):
         user_form = UserForm(request.POST)
         extended_user_form = ExtendedUserForm(request.POST)
 
-        print(user_form.is_valid())
-        print(extended_user_form.is_valid())
         if user_form.is_valid() and extended_user_form.is_valid() and user_form.cleaned_data.get('password') == request.POST['password2']:
             new_user = user_form.save(commit=False)
             new_user.set_password(user_form.cleaned_data.get('password'))

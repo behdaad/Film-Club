@@ -17,11 +17,11 @@
     <table name="FilmClub_extendeduser" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="display_name" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="birthday" sqlType="DATE" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
       <column name="user_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="gender" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="has_avatar" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="is_online" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="birthday" sqlType="DATE" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="avatar" sqlType="VARCHAR(100)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
       <foreign-key name="#FAKE_FilmClub_extendeduser_1" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
       <exported-key name="#FAKE_FilmClub_comment_1" table="FilmClub_comment" schema="" catalog="" columns="user_id"/>
@@ -58,10 +58,10 @@
       <column name="runningMinutes" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="writer_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="genre" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="poster" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="rating" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
       <column name="excerpt" sqlType="VARCHAR(255)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="imdb_link" sqlType="VARCHAR(127)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="poster" sqlType="VARCHAR(100)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
       <foreign-key name="#FAKE_FilmClub_movie_1" columns="writer_id" ref-table="FilmClub_person" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
       <foreign-key name="#FAKE_FilmClub_movie_2" columns="actor2_id" ref-table="FilmClub_person" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>

@@ -23,7 +23,7 @@ class Movie(models.Model):
     actor2 = models.ForeignKey(Person, related_name="actor2")
     runningMinutes = models.IntegerField()
     releaseDate = models.DateField()
-    poster = models.CharField(max_length=127)  # including the extension
+    poster = models.ImageField(upload_to='posters/', default='static/img/default_poster.jpg')  # including the extension
     rating = models.FloatField()
     # rating_calculation_date = models.DateTimeField(default=datetime.datetime.now)
     imdb_link = models.CharField(max_length=127)
@@ -37,7 +37,8 @@ class ExtendedUser(models.Model):
     birthday = models.DateField(null=True)
     gender = models.CharField(max_length=10)
     following = models.ManyToManyField('self', symmetrical=False, blank=True)
-    has_avatar = models.BooleanField(default=False)
+    # has_avatar = models.BooleanField(default=False)
+    avatar = models.ImageField(upload_to='avatars/', default="static/img/default_avatar.png")
     is_online = models.BooleanField(default=False)
 
     def __str__(self):

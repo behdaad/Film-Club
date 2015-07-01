@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -24,7 +26,7 @@ urlpatterns = [
     url(r'^login/$', 'FilmClub.views.sign_in'),
     url(r'^logout/$', 'FilmClub.views.logout_user'),
     url(r'^search/$', 'FilmClub.views.search'),
-    url(r'^timeline/(?P<page>\d+)', 'FilmClub.views.main'),
+    url(r'^timeline/(?P<page>\d+)/$', 'FilmClub.views.main'),
 
     url(r'^user/(?P<user_id>\d+)/$', 'FilmClub.views.show_user'),
     url(r'^user/(?P<user_id>\d+)/(?P<page>\d+)/$', 'FilmClub.views.show_user'),
@@ -43,6 +45,6 @@ urlpatterns = [
     url(r'^post/(?P<post_id>\d+)/unlike/$', 'FilmClub.views.unlike_post'),
     url(r'^post/(?P<post_id>\d+)/comment/$', 'FilmClub.views.comment_on_post'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # url(r'^blog/(?P<blog_id>\d+)/comment/$', 'blog.views.blog_comment'),

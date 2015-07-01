@@ -101,8 +101,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/Users/behdad/Library/Mobile Documents/com~apple~CloudDocs/University/Computer Engineering/40-419 Web Programming/Projects/Project 2/wp_p2/FilmClub/media/'
 LOGIN_URL = '/'
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,  'templates'),
+    # os.path.join(BASE_DIR,  'templates'),
+    # os.path.join(MEDIA),
 )
