@@ -5,11 +5,7 @@
     <div class="ui segment">
         <div class="ui vertical segment">
             <a href="/user/{{ post.author.id }}">
-                {% if post.author.has_avatar %}
-                    <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar' %}/avatar_{{ post.author.id }}.jpg" />
-                {% else %}
-                    <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar/default.png' %}" />
-                {% endif %}
+                <img class="ui tiny avatar left floated middle aligned image" src="{{ post.author.avatar.url }}" />
             </a>
             <div class="ui small header">
                 <a href="/user/{{ post.author.id }}">{{ post.author.display_name }}</a> rated <a href="/movie/{{ post.movie.id }}"><span class="film popup" data-content="Director: {{ post.movie.director.name }} Average Rate: {{ post.movie.rating }}/10" data-variation="huge">{{ post.movie.name }}</span></a> {{ post.rating }}/10.

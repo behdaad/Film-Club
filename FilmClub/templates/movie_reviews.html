@@ -16,11 +16,7 @@
                     <div class="ui segment">
                         <div class="ui vertical segment">
                             <a href="/user/{{ post.author.id }}">
-                                {% if post.author.has_avatar %}
-                                    <img class="ui tiny avatar left floated middle aligned image" src="{% static "img/avatar/" %}avatar_{{ post.author.id }}.jpg" />
-                                {% else %}
-                                    <img class="ui tiny avatar left floated middle aligned image" src="{% static "img/avatar/default.png" %}" />
-                                {% endif %}
+                                <img class="ui tiny avatar left floated middle aligned image" src="{{ post.author.avatar.url }}" />
                             </a>
                             <div class="ui tiny header">
                                 <a href="/user/{{ post.author.id }}">{{ post.author.display_name }}</a>

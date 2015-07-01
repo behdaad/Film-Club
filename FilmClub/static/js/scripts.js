@@ -7,103 +7,101 @@
 $('.ui.dropdown').dropdown();
 
 $('#registerForm')
-    .form(/*{
-     firstName: {
-     identifier : 'firstName',
-     rules: [
-     {
-     type   : 'empty',
-     prompt : 'Please enter your first name.'
-     }
-     ]
-     },
-     lastName: {
-     identifier : 'lastName',
-     rules: [
-     {
-     type   : 'empty',
-     prompt : 'Please enter your last name.'
-     }
-     ]
-     },
-     date: {
-     identifier : 'date',
-     rules: [
-     {
-     type   : 'empty',
-     prompt : 'Please enter your birthday.'
-     }
-     ]
-     },
-     gender: {
-     identifier : 'gender',
-     rules: [
-     {
-     type   : 'empty',
-     prompt : 'Please select your gender.'
-     }
-     ]
-     },
-     displayName: {
-     identifier : 'displayName',
-     rules: [
-     {
-     type   : 'empty',
-     prompt : 'Please enter a display name.'
-     }
-     ]
-     },
-     username: {
-     identifier : 'username',
-     rules: [
-     {
-     type   : 'empty',
-     prompt : 'Please enter a username.'
-     }
-     ]
-     },
-     password1: {
-     identifier : 'password1',
-     rules: [
-     {
-     type   : 'empty',
-     prompt : 'Please enter a password.'
-     },
-     {
-     type   : 'length[6]',
-     prompt : 'Your password must be at least 6 characters.'
-     }
-     ]
-     },
-     password2: {
-     identifier : 'password2',
-     rules: [
-     {
-     type   : 'match[password1]',
-     prompt : 'Your passwords don\'t match.'
-     }
-     ]
-     },
-     email: {
-     identifier : 'email',
-     rules: [
-     {
-     type   : 'empty',
-     prompt : 'Please enter an email.'
-     },
-     {
-     type   : 'email',
-     prompt : 'Please enter a valid email.'
-     }
-     ]
-     }
-     }*/)
+    .form({
+        firstName: {
+            identifier : 'firstName',
+            rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter your first name.'
+                }
+            ]
+        },
+        lastName: {
+            identifier : 'lastName',
+            rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter your last name.'
+                }
+            ]
+        },
+        date: {
+            identifier : 'date',
+            rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter your birthday.'
+                }
+            ]
+        },
+        gender: {
+            identifier : 'gender',
+            rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please select your gender.'
+                }
+            ]
+        },
+        displayName: {
+            identifier : 'displayName',
+            rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter a display name.'
+                }
+            ]
+        },
+        username: {
+            identifier : 'username',
+            rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter a username.'
+                }
+            ]
+        },
+        password1: {
+            identifier : 'password1',
+            rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter a password.'
+                },
+                {
+                    type   : 'length[6]',
+                    prompt : 'Your password must be at least 6 characters.'
+                }
+            ]
+        },
+        password2: {
+            identifier : 'password2',
+            rules: [
+                {
+                    type   : 'match[password1]',
+                    prompt : 'Your passwords don\'t match.'
+                }
+            ]
+        },
+        email: {
+            identifier : 'email',
+            rules: [
+                {
+                    type   : 'empty',
+                    prompt : 'Please enter an email.'
+                },
+                {
+                    type   : 'email',
+                    prompt : 'Please enter a valid email.'
+                }
+            ]
+        }
+    })
 ;
 
 
 /* end register.html JS */
-
-
 
 /* login.html JS */
 
@@ -146,7 +144,7 @@ $('.ui.rating').rating('disable');
 $('.film.popup').popup({});
 $('#notificationsItem').popup({
     on: 'click',
-    inline: true,
+    //inline: true,
     transition: 'fade down'
 });
 
@@ -475,7 +473,7 @@ function comment(post_id, user_id, display_name)
                     '<div class="content">' +
                     '<a class="author" href="/user/' + user_id + '">' + display_name + '</a>' +
                     '<div class="metadata">' +
-                    '<span class="date">' + $.now() + '</span>' +
+                    '<span class="date">Just now</span>' +
                     '</div>' +
                     '<div class="text">' +
                     comment_text +
@@ -519,7 +517,7 @@ function comment_input(event, post_id, user_id, display_name)
                         '<div class="content">' +
                         '<a class="author" href="/user/' + user_id + '">' + display_name + '</a>' +
                         '<div class="metadata">' +
-                        '<span class="date">' + $.now() + '</span>' +
+                        '<span class="date">Just now</span>' +
                         '</div>' +
                         '<div class="text">' +
                         comment_text +
@@ -537,6 +535,5 @@ function comment_input(event, post_id, user_id, display_name)
         }
     }
 }
-
 
 /* comment JS end */

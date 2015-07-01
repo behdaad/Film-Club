@@ -54,7 +54,7 @@ def suggested_movies(user):
 
 def suggested_users(user):
     size = len(ExtendedUser.objects.all())
-    extended_user = ExtendedUser.objects.filter(user=user)[0]
+    extended_user = ExtendedUser.objects.get(user=user)
     all_users = ExtendedUser.objects.all()
     user_id = extended_user.id
     following_count = len(extended_user.following.all())
@@ -133,7 +133,7 @@ def main(request, page=1):
     if page < 0:
         return HttpResponse("Error")
     if request.user.is_authenticated():
-        extended_user = ExtendedUser.objects.filter(user=request.user)[0]
+        extended_user = ExtendedUser.objects.get(user=request.user)
         followings = extended_user.following.all()
 
         posts = fetch_posts(followings)[(page - 1) * 10: page * 10 + 1]
@@ -170,6 +170,7 @@ def main(request, page=1):
             'movies': suggested_movies(request.user),
             'users': suggested_users(request.user),
             'logged_in': extended_user,
+            'notifications': fetch_notifications(request)[:5],
         })
     else:
         return render(request, 'login.html', {
@@ -319,6 +320,7 @@ def search(request):
         'movies': suggested_movies(request.user),
         'users': suggested_users(request.user),
         'logged_in': ExtendedUser.objects.get(user=request.user),
+        'notifications': fetch_notifications(request)[:5],
     })
 
 @login_required
@@ -339,6 +341,7 @@ def single_post(request, post_id):
         'movies': suggested_movies(request.user),
         'users': suggested_users(request.user),
         'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
+        'notifications': fetch_notifications(request)[:5],
     })
 
 @login_required
@@ -391,6 +394,7 @@ def show_user(request, user_id, page=1):
         'has_newer': has_newer,
         'older_page': older_page,
         'newer_page': newer_page,
+        'notifications': fetch_notifications(request)[:5],
     }
 
     if target_user == logged_in_extended_user:
@@ -428,6 +432,7 @@ def show_followers(request, user_id):
         'followers': True,
         'followings_count': followings_count,
         'followers_count': followers_count,
+        'notifications': fetch_notifications(request)[:5],
     })
 
 @login_required
@@ -452,6 +457,7 @@ def show_followings(request, user_id):
         'followers': False,
         'followings_count': followings_count,
         'followers_count': followers_count,
+        'notifications': fetch_notifications(request)[:5],
     })
 
 @login_required
@@ -465,6 +471,7 @@ def show_movie(request, movie_id):
         'movies': suggested_movies(request.user),
         'users': suggested_users(request.user),
         'movie': movie,
+        'notifications': fetch_notifications(request)[:5],
     })
 
 @login_required
@@ -524,6 +531,7 @@ def show_reviews(request, movie_id, page=1):
         'has_newer': has_newer,
         'older_page': older_page,
         'newer_page': newer_page,
+        'notifications': fetch_notifications(request)[:5],
     })
 
 @login_required
@@ -615,19 +623,47 @@ def fetch_notifications(request):
     posts = Post.objects.filter(author=target_user)
     for post in posts:
         for like in post.likes.all():
-            notif = Notification()
-            notif.user = like.user
-            notif.date = like.date
-            notif.type = "like"
-            notif.post_id = like.post.id
-            notif.save()
-            notifs.append(notif)
+            if like.user != target_user:
+                notif = Notification()
+                notif.user = like.user
+                notif.date = like.date
+                notif.type = "like"
+                notif.post_id = like.post.id
+                notif.save()
+                notifs.append(notif)
 
         for comment in post.comments.all():
-            notif = Notification()
-            notif.user = comment.user
-            notif.date = comment.date
-            notif.type = "comment_post"
-            notif.post_id = comment.post.id
-            notif.save()
-            notifs.append(notif)
+            if comment.user != target_user:
+                notif = Notification()
+                notif.user = comment.user
+                notif.date = comment.date
+                notif.type = "comment_post"
+                notif.post_id = comment.post.id
+                notif.save()
+                notifs.append(notif)
+
+    user_comments = Comment.objects.filter(user=target_user)
+    for user_comment in user_comments:
+        for comment in user_comment.post.comments.all():
+            if comment.user != target_user:
+                notif = Notification()
+                notif.user = comment.user
+                notif.date = comment.date
+                notif.type = "comment_comment"
+                notif.post_id = comment.post.id
+                notif.save()
+                notifs.append(notif)
+
+    follow_tuples = FollowTuple.objects.filter(followee=target_user)
+    for t in follow_tuples:
+        notif = Notification()
+        notif.user = t.follower
+        notif.date = t.date
+        notif.type = "follow"
+        notif.post_id = 0
+        notif.save()
+        notifs.append(notif)
+
+    notifs.sort(key=lambda x: x.date)
+    notifs.reverse()
+    return notifs
