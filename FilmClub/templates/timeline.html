@@ -9,11 +9,7 @@
                     <div class="ui vertical segment">
                         {{ post.reason }}
                         <a href="/user/{{ post.author.id }}">
-                            {% if post.author.has_avatar %}
-                                <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar' %}/avatar_{{ post.author.id }}.jpg" />
-                            {% else %}
-                                <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar/default.png' %}" />
-                            {% endif %}
+                            <img class="ui tiny avatar left floated middle aligned image" src="{{ post.author.avatar.url }}" />
                         </a>
                         <div class="ui small header">
                             <a href="/user/{{ post.author.id }}">{{ post.author.display_name }}</a> rated <a href="/movie/{{ post.movie.id }}"><span class="film popup" data-content="Director: {{ post.movie.director.name }} Average Rate: {{ post.movie.rating }}/10" data-variation="huge">{{ post.movie.name }}</span></a> {{ post.rating }}/10.
@@ -78,7 +74,7 @@
                             {% for comment in post.comments.all %}
                                 <div class="comment">
                                     <a href="/user/{{ comment.user.id }}" class="avatar">
-                                        <img src="{% static "img/avatar" %}/avatar_{{ comment.user.id }}.jpg">
+                                        <img src="{{ comment.user.avatar.url }}">
                                     </a>
                                     <div class="content">
                                         <a class="author" href="/user/{{ comment.user.id }}">{{ comment.user.display_name }}</a>
@@ -110,97 +106,4 @@
             </a>
         {% endif %}
     </div>
-{% endblock %}
-
-{% block scripts %}
-
-    /* comment JS */
-
-    function comment(post_id, user_id, display_name)
-    {
-        var target_url = '/post/' + post_id + '/comment/';
-        var comment_text = $("#comment_text_" + post_id).val();
-        // console.log(comment_text);
-        if (comment_text !== "")
-        {
-            $.post(target_url,
-                {
-                    comment_text: comment_text
-                },
-                function(data, status)
-                {
-                    // alert('success! data: ' + data);
-                }
-            );
-            var target_user_url = "/user/" + user_id;
-            $('#comments_section_' + post_id).prepend(
-                '<div class="comment">' +
-                '<a href="' + target_user_url + '" class="avatar">' +
-                '<img src="' + '{% static "img/avatar" %}' + '/avatar_' + user_id + '.jpg">' +
-                '</a>' +
-                '<div class="content">' +
-                '<a class="author" href="/user/' + user_id + '">' + display_name + '</a>' +
-                '<div class="metadata">' +
-                '<span class="date">Just now</span>' +
-                '</div>' +
-                '<div class="text">' +
-                comment_text +
-                '</div>' +
-                '</div>' +
-                '</div>'
-            );
-            var comments_count_element = $("#comments_count_" + post_id);
-            var comments_count = parseInt(comments_count_element.text()) + 1;
-            comments_count_element.text(comments_count);
-            comment_text = $("#comment_text_" + post_id).val("")
-            return false;
-        }
-    }
-
-    function comment_input(event, post_id, user_id, display_name)
-    {
-        // alert("khafan func called");
-        if (event.keyCode === 13)
-        {
-            var target_url = '/post/' + post_id + '/comment/';
-            var comment_text = $("#comment_text_" + post_id).val();
-            // console.log(comment_text);
-            if (comment_text !== "")
-            {
-                $.post(target_url,
-                    {
-                        comment_text: comment_text
-                    },
-                    function(data, status)
-                    {
-                        // alert('success! data: ' + data);
-                    }
-                );
-                var target_user_url = "/user/" + user_id;
-                $('#comments_section_' + post_id).prepend(
-                    '<div class="comment">' +
-                    '<a href="' + target_user_url + '" class="avatar">' +
-                    '<img src="' + '{% static "img/avatar" %}' + '/avatar_' + user_id + '.jpg">' +
-                    '</a>' +
-                    '<div class="content">' +
-                    '<a class="author" href="/user/' + user_id + '">' + display_name + '</a>' +
-                    '<div class="metadata">' +
-                    '<span class="date">Just now</span>' +
-                    '</div>' +
-                    '<div class="text">' +
-                    comment_text +
-                    '</div>' +
-                    '</div>' +
-                    '</div>'
-                );
-                var comments_count_element = $("#comments_count_" + post_id);
-                var comments_count = parseInt(comments_count_element.text()) + 1;
-                comments_count_element.text(comments_count);
-                comment_text = $("#comment_text_" + post_id).val("");
-                return false;
-            }
-        }
-    }
-
-    /* comment JS end */
 {% endblock %}

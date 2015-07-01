@@ -23,7 +23,7 @@ class Movie(models.Model):
     actor2 = models.ForeignKey(Person, related_name="actor2")
     runningMinutes = models.IntegerField()
     releaseDate = models.DateField()
-    poster = models.ImageField(upload_to='posters/', default='static/img/default_poster.jpg')  # including the extension
+    poster = models.ImageField(upload_to='posters/', default='default_poster.jpg')  # including the extension
     rating = models.FloatField()
     # rating_calculation_date = models.DateTimeField(default=datetime.datetime.now)
     imdb_link = models.CharField(max_length=127)
@@ -38,7 +38,7 @@ class ExtendedUser(models.Model):
     gender = models.CharField(max_length=10)
     following = models.ManyToManyField('self', symmetrical=False, blank=True)
     # has_avatar = models.BooleanField(default=False)
-    avatar = models.ImageField(upload_to='avatars/', default="static/img/default_avatar.png")
+    avatar = models.ImageField(upload_to='avatars/', default="default_avatar.png")
     is_online = models.BooleanField(default=False)
 
     def __str__(self):
@@ -68,6 +68,8 @@ class Like(models.Model):
 
 
 class Comment(models.Model):
+    class Meta:
+        ordering = ['-date']
     user = models.ForeignKey(ExtendedUser)
     post = models.ForeignKey(Post, related_name="comments")
     date = models.DateTimeField(default=datetime.datetime.now)
@@ -75,3 +77,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return str(self.user) + " commented on " + str(self.post)
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(ExtendedUser)
+    date = models.DateTimeField(default=datetime.datetime.now)
+    type = models.CharField(max_length=20)  # like (post), follow (user), comment_post (post), comment_comment (post)
+    post_id = models.IntegerField()
+
+
+class FollowTuple(models.Model):
+    follower = models.ForeignKey(ExtendedUser, related_name='follower')
+    followee = models.ForeignKey(ExtendedUser, related_name='followee')
+    date = models.DateTimeField(default=datetime.datetime.now)

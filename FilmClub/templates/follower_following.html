@@ -39,29 +39,23 @@
     <!-- main column -->
     <div class="six wide computer eleven wide tablet sixteen wide mobile column">
         <div class="ui segment">
-            <!-- <div class="ui vertical segment"> -->
             <div class="ui medium header">
                 {% if followers %}
-                Followers:
+                    Followers:
                 {% else %}
-                Following:
+                    Following:
                 {% endif %}
             </div>
-            <!-- </div> -->
             <div class="ui vertical segment">
                 <div class="ui divided list">
-                {% for user in users_list %}
-                    <div class="item">
-                        <a href="/user/{{ user.id }}">
-                            {% if user.has_avatar %}
-                            <img class="ui avatar left floated image" src="{% static "img/avatar" %}/avatar_{{ user.id }}.jpg">
-                            {% else %}
-                            <img class="ui avatar left floated image" src="{% static "img/avatar/default.png" %}">
-                            {% endif %}
-                        </a>
-                        <a class="ui tiny header" href="/user/{{ user.id }}">{{ user.display_name }}</a>
-                    </div>
-                {% endfor %}
+                    {% for user in users_list %}
+                        <div class="item">
+                            <a href="/user/{{ user.id }}">
+                                <img class="ui avatar left floated image" src="{{ user.avatar.url }}">
+                            </a>
+                            <a class="ui tiny header" href="/user/{{ user.id }}">{{ user.display_name }}</a>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

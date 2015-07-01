@@ -1,6 +1,6 @@
 import random, datetime
 
-from .models import ExtendedUser, Movie, Post, Like, Comment
+from .models import ExtendedUser, Movie, Post, Like, Comment, FollowTuple, Notification
 
 from django import forms
 from django.contrib.auth.models import User
@@ -15,6 +15,10 @@ from django.contrib.auth.decorators import login_required
 def calculate_rating(movie_id):
     movie = Movie.objects.get(id=movie_id)
     reviews = Post.objects.filter(movie=movie)
+    if len(reviews) == 0:
+        movie.rating = 0
+        movie.save()
+        return
     sum = 0
     size = len(reviews)
     for r in reviews:
@@ -258,10 +262,16 @@ def logout_user(request):
 @login_required
 def follow(request, user_id):
     user_id = int(user_id)
-    follower_extended_user = ExtendedUser.objects.filter(user=request.user)[0]
-    followed_extended_user = ExtendedUser.objects.filter(id=user_id)[0]
+    follower_extended_user = ExtendedUser.objects.get(user=request.user)
+    followed_extended_user = ExtendedUser.objects.get(id=user_id)
 
     follower_extended_user.following.add(followed_extended_user)
+
+    new_follow_tuple = FollowTuple()
+    new_follow_tuple.follower = followed_extended_user
+    new_follow_tuple.followee = followed_extended_user
+    new_follow_tuple.date = datetime.datetime.now()
+    new_follow_tuple.save()
 
     # return redirect(request.GET['next'])
     return HttpResponse("OK")
@@ -269,10 +279,13 @@ def follow(request, user_id):
 @login_required
 def unfollow(request, user_id):
     user_id = int(user_id)
-    unfollower_extended_user = ExtendedUser.objects.filter(user=request.user)[0]
-    unfollowed_extended_user = ExtendedUser.objects.filter(id=user_id)[0]
+    unfollower_extended_user = ExtendedUser.objects.get(user=request.user)
+    unfollowed_extended_user = ExtendedUser.objects.get(id=user_id)
 
     unfollower_extended_user.following.remove(unfollowed_extended_user)
+
+    follow_tuple = FollowTuple.objects.filter(follower=unfollower_extended_user).filter(followee=unfollowed_extended_user)
+    follow_tuple.delete()
 
     # return redirect(request.GET['next'])
     return HttpResponse("OK")
@@ -590,7 +603,31 @@ def comment_on_post(request, post_id):
 
         new_comment.save()
 
-        return HttpResponse("OK")
+        return HttpResponse(new_comment.user.avatar.url)
     else:
         return HttpResponse("Empty comment; not submitted")
 
+@login_required
+def fetch_notifications(request):
+    target_user = ExtendedUser.objects.get(user=request.user)
+
+    notifs = []
+    posts = Post.objects.filter(author=target_user)
+    for post in posts:
+        for like in post.likes.all():
+            notif = Notification()
+            notif.user = like.user
+            notif.date = like.date
+            notif.type = "like"
+            notif.post_id = like.post.id
+            notif.save()
+            notifs.append(notif)
+
+        for comment in post.comments.all():
+            notif = Notification()
+            notif.user = comment.user
+            notif.date = comment.date
+            notif.type = "comment_post"
+            notif.post_id = comment.post.id
+            notif.save()
+            notifs.append(notif)

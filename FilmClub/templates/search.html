@@ -2,55 +2,51 @@
 {% load staticfiles %}
 
 {% block main %}
-<div class="ui segment">
-    <div class="ui top attached tabular menu">
-        <a class="active item" data-tab="first">Movies</a>
-        <a class="item" data-tab="second">Users</a>
-        <!-- <a class="item" data-tab="third">Third</a> -->
-    </div>
-    <div class="ui bottom attached active tab segment" data-tab="first">
-        <div class="ui header">Results</div>
-        <div class="ui divided items">
-        {% for movie in movie_results %}
-            <div class="item">
-                <a class="ui inline link" href="/movie/{{ movie.id }}">
-                    <img class="ui tiny left floated rounded bordered image" src="{{ movie.poster.url }}" alt="{{ movie.name }}" >
-                </a>
-                <div class="content">
-                    <a class="ui medium header" href="/movie/{{ movie.id }}">{{ movie.name }}</a>
-                    <div class="meta">
-                        <span class="genre">{{ movie.genre }}</span>
+    <div class="ui segment">
+        <div class="ui top attached tabular menu">
+            <a class="active item" data-tab="first">Movies</a>
+            <a class="item" data-tab="second">Users</a>
+            <!-- <a class="item" data-tab="third">Third</a> -->
+        </div>
+        <div class="ui bottom attached active tab segment" data-tab="first">
+            <div class="ui header">Results</div>
+            <div class="ui divided items">
+                {% for movie in movie_results %}
+                    <div class="item">
+                        <a class="ui inline link" href="/movie/{{ movie.id }}">
+                            <img class="ui tiny left floated rounded bordered image" src="{{ movie.poster.url }}" alt="{{ movie.name }}" >
+                        </a>
+                        <div class="content">
+                            <a class="ui medium header" href="/movie/{{ movie.id }}">{{ movie.name }}</a>
+                            <div class="meta">
+                                <span class="genre">{{ movie.genre }}</span>
+                            </div>
+                            <div class="description">
+                                Director: {{ movie.director.name }}
+                            </div>
+                            <div class="extra">
+                                Average rating: {{ movie.rating }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="description">
-                        Director: {{ movie.director.name }}
-                    </div>
-                    <div class="extra">
-                        Average rating: {{ movie.rating }}
-                    </div>
-                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="second">
+            <div class="ui header">Results</div>
+            <div class="ui divided list">
+                {% for user in user_results %}
+                    <div class="item">
+                        <a href="/user/{{ user.id }}">
+                            <img class="ui tiny avatar left floated image" src="{{ user.avatar.url }}">
+                        </a>
+                        <a class="ui medium header" href="/user/{{ user.id }}">{{ user.user.first_name }} {{ user.user.last_name }}</a>
+                        <div class="content">
+                            Posts: {{ user.posts.all|length }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-    <div class="ui bottom attached tab segment" data-tab="second">
-        <div class="ui header">Results</div>
-        <div class="ui divided list">
-        {% for user in user_results %}
-            <div class="item">
-                <a href="/user/{{ user.id }}">
-                    {% if user.has_avatar %}
-                    <img class="ui tiny avatar left floated image" src="{% static "img/avatar/" %}avatar_{{ user.id }}.jpg">
-                    {% else %}
-                    <img class="ui tiny avatar left floated image" src="{% static "img/avatar/" %}default.png">
-                    {% endif %}
-                </a>
-                <a class="ui medium header" href="/user/{{ user.id }}">{{ user.user.first_name }} {{ user.user.last_name }}</a>
-                <div class="content">
-                    Posts: {{ user.posts.all|length }}
-                </div>
-            </div>
-        {% endfor %}
-        </div>
-    </div>
-</div>
 {% endblock %}
