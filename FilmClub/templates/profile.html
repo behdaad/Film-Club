@@ -37,96 +37,110 @@
 
 {% block main %}
     <div class="ui segment">
-        {% for post in posts %}
-            <div class="ui segment">
-                <div class="ui vertical segment">
-                    <a href="/user/{{ post.author.id }}">
-                        {% if post.author.has_avatar %}
-                            <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar' %}/avatar_{{ post.author.id }}.jpg" />
-                        {% else %}
-                            <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar/default.png' %}" />
-                        {% endif %}
-                    </a>
-                    <div class="ui small header">
-                        <a href="/user/{{ post.author.id }}">{{ post.author.display_name }}</a> rated <a href="/movie/{{ post.movie.id }}"><span class="film popup" data-content="Director: {{ post.movie.director.name }} Average Rate: {{ post.movie.rating }}/10" data-variation="huge">{{ post.movie.name }}</span></a> {{ post.rating }}/10.
+        {% if posts %}
+            {% for post in posts %}
+                <div class="ui segment">
+                    <div class="ui vertical segment">
+                        <a href="/user/{{ post.author.id }}">
+                            {% if post.author.has_avatar %}
+                                <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar' %}/avatar_{{ post.author.id }}.jpg" />
+                            {% else %}
+                                <img class="ui tiny avatar left floated middle aligned image" src="{% static 'img/avatar/default.png' %}" />
+                            {% endif %}
+                        </a>
+                        <div class="ui small header">
+                            <a href="/user/{{ post.author.id }}">{{ post.author.display_name }}</a> rated <a href="/movie/{{ post.movie.id }}"><span class="film popup" data-content="Director: {{ post.movie.director.name }} Average Rate: {{ post.movie.rating }}/10" data-variation="huge">{{ post.movie.name }}</span></a> {{ post.rating }}/10.
+                        </div>
+                        <div class="ui rating" data-rating="{{ post.rating }}" data-max-rating="10"></div>
+                        <br />
+                        <a href="/post/{{ post.id }}"><div class="date">{{ post.date }}</div></a>
                     </div>
-                    <div class="ui rating" data-rating="{{ post.rating }}" data-max-rating="10"></div>
-                    <br />
-                    <a href="/post/{{ post.id }}"><div class="date">{{ post.date }}</div></a>
-                </div>
-                <div class="ui vertical segment">
-                    <a href="movie/{{ post.movie.id }}">
-                        <img class="ui small left floated top aligned rounded bordered image" alt="{{ post.movie.name }}" src="{% static 'img/posters' %}/{{ post.movie.poster }}" />
-                    </a>
-                    <p>
-                        {{ post.review }}
-                    </p>
-                </div>
+                    <div class="ui vertical segment">
+                        <a href="movie/{{ post.movie.id }}">
+                            <img class="ui small left floated top aligned rounded bordered image" alt="{{ post.movie.name }}" src="{% static 'img/posters' %}/{{ post.movie.poster }}" />
+                        </a>
+                        <p>
+                            {{ post.review }}
+                        </p>
+                    </div>
 
-                <!-- like segment -->
-                <div class="ui vertical segment">
-                    <div class="ui grid">
-                        <div class="row">
-                            <div class="eight wide column" style="padding-left: 15px; width: 120px !important;">
-                                {% if post.liked %}
-                                    <div class="ui basic labeled left icon blue button likeButton" id="like_button_{{ post.id }}" onclick="unlike({{ post.id }})">
-                                        <i class="thumbs outline down icon"></i>
-                                        Unlike
+                    <!-- like segment -->
+                    <div class="ui vertical segment">
+                        <div class="ui grid">
+                            <div class="row">
+                                <div class="eight wide column" style="padding-left: 15px; width: 120px !important;">
+                                    {% if post.liked %}
+                                        <div class="ui basic labeled left icon blue button likeButton" id="like_button_{{ post.id }}" onclick="unlike({{ post.id }})">
+                                            <i class="thumbs outline down icon"></i>
+                                            Unlike
+                                        </div>
+                                    {% else %}
+                                        <div class="ui basic labeled left icon blue button likeButton" id="like_button_{{ post.id }}" onclick="like({{ post.id }})">
+                                            <i class="thumbs outline up icon"></i>
+                                            Like
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="eight wide column">
+                                    <div class="ui mini horizontal statistic" style="margin-top: 5px;">
+                                        <div class="value likeCount" id="like_count_{{ post.id }}">{{ post.likes.count }}</div>
+                                        <div class="label">people like this.</div>
                                     </div>
-                                {% else %}
-                                    <div class="ui basic labeled left icon blue button likeButton" id="like_button_{{ post.id }}" onclick="like({{ post.id }})">
-                                        <i class="thumbs outline up icon"></i>
-                                        Like
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="eight wide column">
-                                <div class="ui mini horizontal statistic" style="margin-top: 5px;">
-                                    <div class="value likeCount" id="like_count_{{ post.id }}">{{ post.likes.count }}</div>
-                                    <div class="label">people like this.</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- like segment end -->
+                    <!-- like segment end -->
 
-                <!-- comments segment -->
-                <div class="ui vertical segment">
-                    <div class="ui reply form">
-                        <div class="field">
-                            <div class="ui action input">
-                                <input onkeypress="comment_input(event, {{ post.id }}, {{ logged_in.id }}, '{{ logged_in.display_name }}')" class="comment_input" type="text" placeholder="Type your comment..." id="comment_text_{{ post.id }}" name="comment_text">
-                                <div class="ui small blue right labeled icon button" onclick="comment({{ post.id }}, {{  logged_in.id }}, '{{ logged_in.display_name }}')">
-                                    <i class="comment outline icon"></i>
-                                    Comment
+                    <!-- comments segment -->
+                    <div class="ui vertical segment">
+                        <div class="ui reply form">
+                            <div class="field">
+                                <div class="ui action input">
+                                    <input onkeypress="comment_input(event, {{ post.id }}, {{ logged_in.id }}, '{{ logged_in.display_name }}')" class="comment_input" type="text" placeholder="Type your comment..." id="comment_text_{{ post.id }}" name="comment_text">
+                                    <div class="ui small blue right labeled icon button" onclick="comment({{ post.id }}, {{  logged_in.id }}, '{{ logged_in.display_name }}')">
+                                        <i class="comment outline icon"></i>
+                                        Comment
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <h4 class="ui dividing header"><span id="comments_count_{{ post.id }}">{{ post.comments.count }}</span> Comments</h4>
-                    <div class="ui comments" id="comments_section_{{ post.id }}">
-                        {% for comment in post.comments.all %}
-                            <div class="comment">
-                                <a href="/user/{{ comment.user.id }}" class="avatar">
-                                    <img src="{% static "img/avatar" %}/avatar_{{ comment.user.id }}.jpg">
-                                </a>
-                                <div class="content">
-                                    <a class="author" href="/user/{{ comment.user.id }}">{{ comment.user.display_name }}</a>
-                                    <div class="metadata">
-                                        <span class="date">{{ comment.date }}</span>
-                                    </div>
-                                    <div class="text">
-                                        {{ comment.text }}
+                        <h4 class="ui dividing header"><span id="comments_count_{{ post.id }}">{{ post.comments.count }}</span> Comments</h4>
+                        <div class="ui comments" id="comments_section_{{ post.id }}">
+                            {% for comment in post.comments.all %}
+                                <div class="comment">
+                                    <a href="/user/{{ comment.user.id }}" class="avatar">
+                                        <img src="{% static "img/avatar" %}/avatar_{{ comment.user.id }}.jpg">
+                                    </a>
+                                    <div class="content">
+                                        <a class="author" href="/user/{{ comment.user.id }}">{{ comment.user.display_name }}</a>
+                                        <div class="metadata">
+                                            <span class="date">{{ comment.date }}</span>
+                                        </div>
+                                        <div class="text">
+                                            {{ comment.text }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
+                    <!-- comments segment end -->
                 </div>
-                <!-- comments segment end -->
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p>Oops! Looks like there is nothing to show. This user hasn't posted any reviews yet.</p>
+        {% endif %}
+        {% if has_older %}
+            <a href="/user/{{ user.id }}/{{ older_page }}/">
+                <div class="ui basic button">Older</div>
+            </a>
+        {% endif %}
+        {% if has_newer %}
+            <a href="/user/{{ user.id }}/{{ newer_page }}/">
+                <div class="ui basic button">Newer</div>
+            </a>
+        {% endif %}
     </div>
 {% endblock %}
 

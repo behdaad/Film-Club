@@ -114,11 +114,11 @@ def fetch_posts(users):
             if not already_added:
                 posts.append(comment.post)
 
-            # for like in likes:
-            #     if comment.post == like.post:
-            #         if comment.date > like.date:
-            #             comment.post.reason = comment.user.display_name + " commented on this."
-            #             comment.post.save()
+                # for like in likes:
+                #     if comment.post == like.post:
+                #         if comment.date > like.date:
+                #             comment.post.reason = comment.user.display_name + " commented on this."
+                #             comment.post.save()
 
     posts.sort(key=lambda x: x.last_event)
     posts.reverse()
@@ -155,8 +155,7 @@ def main(request, page=1):
         if len(posts) != 11:
             has_newer = False
 
-        return render(request, 'timeline.html',
-        {
+        return render(request, 'timeline.html', {
             'title': "Timeline",
             'page': "timeline",
             'posts': posts,
@@ -176,49 +175,64 @@ def main(request, page=1):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
+        widgets = {
+            'username': forms.TextInput(attrs={'placeholder': 'Username'}),
+            'first_name': forms.TextInput(attrs={'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Last Name'}),
+            'password': forms.PasswordInput(attrs={'placeholder': 'Password'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
+
+        }
         fields = ['username', 'password', 'email', 'first_name', 'last_name']
 
 class ExtendedUserForm(forms.ModelForm):
     class Meta:
         model = ExtendedUser
-        exclude = ['user', 'following', 'gender']
-
-        # gender = forms.ChoiceField(choices=
+        widgets = {
+            'display_name': forms.TextInput(attrs={'placeholder': 'Display Name'}),
+            # 'gender': forms.TextInput(attrs={'placeholder': 'Last Name'}),
+            # 'birthday': forms.DateInput(attrs={'placeholder': 'DD/MM/YYYY'}),
+        }
+        exclude = ['user', 'following', 'gender', 'has_avatar', 'is_online', 'birthday']
 
 def register(request):
+    if request.user.is_authenticated():
+        return redirect("/")
     if request.method == 'GET':
-        user_form = UserForm(prefix="user")
-        extended_user_form = ExtendedUserForm(prefix="extended_user")
+        user_form = UserForm()
+        extended_user_form = ExtendedUserForm()
         return render(request, 'register.html', {
             'title': "Register",
             'form1': user_form,
             'form2': extended_user_form,
         })
     else:  # POST
-        # username = request.POST['username']
-        # password1 = request.POST['password1']
-        # password2 = request.POST['password2']
-        # firstName = request.POST['firstName']
-        # lastName = request.POST['lastName']
-        # date = request.POST['date']
-        # gender = request.POST['gender']
-        # displayName = request.POST['displayName']
-        # email = request.POST['email']
+        user_form = UserForm(request.POST)
+        extended_user_form = ExtendedUserForm(request.POST)
 
-        #  validate form info
+        print(user_form.is_valid())
+        print(extended_user_form.is_valid())
+        if user_form.is_valid() and extended_user_form.is_valid() and user_form.cleaned_data.get('password') == request.POST['password2']:
+            new_user = user_form.save(commit=False)
+            new_user.set_password(user_form.cleaned_data.get('password'))
+            new_user.save()
 
-        # new_user = User(username=username, password=password1, email=email, first_name=firstName, last_name=lastName)
-        # new_user.save()
+            new_extended_user = extended_user_form.save(commit=False)
+            new_extended_user.user = new_user
+            new_extended_user.save()
 
-        # new_extended_user = ExtendedUser(user=new_user, displayName=displayName, birthday=date, isMale=gender)
-        # new_extended_user.save()
-
-        return render(request, 'login.html', {
-            'title': 'Welcome',
-            'error': False,
-            'forgot': False,
-            'sign_up': True,
-        })
+            return render(request, 'login.html', {
+                'title': 'Welcome',
+                'error': False,
+                'forgot': False,
+                'sign_up': True,
+            })
+        else:
+            return render(request, 'register.html', {
+                'title': "Register",
+                'form1': user_form,
+                'form2': extended_user_form,
+            })
 
 def sign_in(request):
     username = request.POST['username']
@@ -226,7 +240,7 @@ def sign_in(request):
     user = authenticate(username=username, password=password)
     if user is not None and user.is_active:
         login(request, user)
-        target_user = ExtendedUser.objects.filter(user=user)[0]
+        target_user = ExtendedUser.objects.get(user=user)
         target_user.is_online = True
         target_user.save()
         return redirect("/")
@@ -293,7 +307,7 @@ def search(request):
         'user_results': user_results,
         'movies': suggested_movies(request.user),
         'users': suggested_users(request.user),
-        'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
+        'logged_in': ExtendedUser.objects.get(user=request.user),
     })
 
 @login_required
@@ -317,11 +331,14 @@ def single_post(request, post_id):
     })
 
 @login_required
-def show_user(request, user_id):
+def show_user(request, user_id, page=1):
+    page = int(page)
+    if page < 0:
+        return HttpResponse("Error")
     target_user = ExtendedUser.objects.get(id=user_id)
-    logged_in_extended_user = ExtendedUser.objects.filter(user=request.user)[0]
+    logged_in_extended_user = ExtendedUser.objects.get(user=request.user)
 
-    posts = Post.objects.filter(author=target_user)
+    posts = Post.objects.filter(author=target_user)[(page - 1) * 10: page * 10 + 1]
     for post in posts:
         post.liked = False
         post.save()
@@ -340,15 +357,29 @@ def show_user(request, user_id):
         if target_user in user.following.all():
             followers_count += 1
 
+    has_older = False
+    older_page = page - 1
+    if page != 1:
+        has_older = True
+
+    has_newer = True
+    newer_page = page + 1
+    if len(posts) != 11:
+        has_newer = False
+
     dictionary = {
         'title': target_user.display_name,
         'user': target_user,
-        'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
+        'logged_in': ExtendedUser.objects.get(user=request.user),
         'movies': suggested_movies(request.user),
         'users': suggested_users(request.user),
         'posts': posts,
         'followings_count': followings_count,
         'followers_count': followers_count,
+        'has_older': has_older,
+        'has_newer': has_newer,
+        'older_page': older_page,
+        'newer_page': newer_page,
     }
 
     if target_user == logged_in_extended_user:
@@ -441,11 +472,14 @@ def submit_review(request, movie_id):
     return redirect('/movie/' + str(movie_id) + '/reviews/')
 
 @login_required
-def show_reviews(request, movie_id):
+def show_reviews(request, movie_id, page=1):
+    page = int(page)
+    if page < 0:
+        return HttpResponse("Error")
     movie = Movie.objects.get(id=movie_id)
     calculate_rating(movie.id)
 
-    posts = Post.objects.filter(movie=movie).order_by('-date')
+    posts = Post.objects.filter(movie=movie).order_by('-date')[(page - 1) * 10: page * 10 + 1]
 
     for post in posts:
         post.liked = False
@@ -458,6 +492,16 @@ def show_reviews(request, movie_id):
                 like.post.save()
                 break
 
+    has_older = False
+    older_page = page - 1
+    if page != 1:
+        has_older = True
+
+    has_newer = True
+    newer_page = page + 1
+    if len(posts) != 11:
+        has_newer = False
+
     return render(request, 'movie_reviews.html', {
         'title': movie.name,
         'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
@@ -465,6 +509,10 @@ def show_reviews(request, movie_id):
         'users': suggested_users(request.user),
         'movie': movie,
         'posts': posts,
+        'has_older': has_older,
+        'has_newer': has_newer,
+        'older_page': older_page,
+        'newer_page': newer_page,
     })
 
 @login_required

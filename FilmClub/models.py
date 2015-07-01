@@ -12,7 +12,6 @@ class Person(models.Model):
     def __str__(self):
         return self.name
 
-
 class Movie(models.Model):
     name = models.CharField(max_length=127)
     description = models.TextField()
@@ -35,7 +34,7 @@ class Movie(models.Model):
 class ExtendedUser(models.Model):
     user = models.OneToOneField(User)
     display_name = models.CharField(max_length=127)
-    birthday = models.DateField()
+    birthday = models.DateField(null=True)
     gender = models.CharField(max_length=10)
     following = models.ManyToManyField('self', symmetrical=False, blank=True)
     has_avatar = models.BooleanField(default=False)
@@ -58,7 +57,6 @@ class Post(models.Model):
     def __str__(self):
         return str(self.author) + ' (' + str(self.movie) + ')'
 
-
 class Like(models.Model):
     user = models.ForeignKey(ExtendedUser)
     post = models.ForeignKey(Post, related_name="likes")
@@ -76,5 +74,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return str(self.user) + " commented on " + str(self.post)
-
-

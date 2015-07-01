@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^timeline/(?P<page>\d+)', 'FilmClub.views.main'),
 
     url(r'^user/(?P<user_id>\d+)/$', 'FilmClub.views.show_user'),
+    url(r'^user/(?P<user_id>\d+)/(?P<page>\d+)/$', 'FilmClub.views.show_user'),
     url(r'^user/(?P<user_id>\d+)/follow/$', 'FilmClub.views.follow'),
     url(r'^user/(?P<user_id>\d+)/unfollow/$', 'FilmClub.views.unfollow'),
     url(r'^user/(?P<user_id>\d+)/followers/$', 'FilmClub.views.show_followers'),
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'^movie/(?P<movie_id>\d+)/$', 'FilmClub.views.show_movie'),
     url(r'^movie/(?P<movie_id>\d+)/submit_review/$', 'FilmClub.views.submit_review'),
     url(r'^movie/(?P<movie_id>\d+)/reviews/$', 'FilmClub.views.show_reviews'),
+    url(r'^movie/(?P<movie_id>\d+)/reviews/(?P<page>\d+)/$', 'FilmClub.views.show_reviews'),
 
     url(r'^post/(?P<post_id>\d+)/$', 'FilmClub.views.single_post'),
     url(r'^post/(?P<post_id>\d+)/like/$', 'FilmClub.views.like_post'),

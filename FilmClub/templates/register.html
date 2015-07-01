@@ -12,62 +12,72 @@
                 <div class="ui small right aligned">
                     <form class="ui form segment" action="" method="post" id="registerForm">
                         {% csrf_token %}
-                        {{ form1 }}
-                        {{ form2 }}
-                        <!-- <div class="ui error message"></div>
+                        <div class="ui error message">{{ form1.non_field_errors}}</div>
+                        <div class="ui error message">{{ form2.non_field_errors}}</div>
                         <div class="two fields">
                             <div class="field">
+                                {{ form1.first_name.errors }}
                                 <label>First Name</label>
                                 <div class="ui left icon input">
-                                    <input placeholder="First Name" type="text" name="firstName" />
+{#                                    <input placeholder="First Name" type="text" name="firstName" />#}
+                                    {{ form1.first_name }}
                                     <i class="write icon"></i>
                                 </div>
                             </div>
                             <div class="field">
+                                {{ form1.last_name.errors }}
                                 <label>Last Name</label>
                                 <div class="ui left icon input">
-                                    <input placeholder="Last Name" type="text" name="lastName" />
+{#                                    <input placeholder="Last Name" type="text" name="lastName" />#}
+                                    {{ form1.last_name }}
                                     <i class="write icon"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="two fields">
-                            <div class="field">
-                                <div class="field">
-                                    <label>Date</label>
-                                    <input placeholder="DD/MM/YYYY" type="date" name="date">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label>Gender</label>
-                                <select class="ui dropdown" name="gender">
-                                    <option value="">Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </select>
-                            </div>
-                        </div>
+{#                        <div class="two fields">#}
+{#                            <div class="field">#}
+{#                                <div class="field">#}
+{#                                    <label>Birthday</label>#}
+{#                                    <input placeholder="DD/MM/YYYY" type="date" name="date">#}
+{#                                    {{ form2.birthday }}#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="field">#}
+{#                                <label>Gender</label>#}
+{#                                <select class="ui dropdown" name="gender">#}
+{#                                    <option value="">Gender</option>#}
+{#                                    <option value="male">Male</option>#}
+{#                                    <option value="female">Female</option>#}
+{#                                </select>#}
+{#                            </div>#}
+{#                        </div>#}
                         <div class="field">
+                            {{ form2.display_name.errors }}
                             <label>Display Name</label>
                             <div class="ui left icon input">
-                                <input placeholder="Display Name" type="text" name="displayName" />
+{#                                <input placeholder="Display Name" type="text" name="displayName" />#}
+                                {{ form2.display_name }}
                                 <i class="user icon"></i>
                             </div>
                         </div>
 
                         <div class="field">
+                            {{ form1.username.errors }}
                             <label>Username</label>
                             <div class="ui left icon input">
-                                <input placeholder="Username" type="text" name="username" />
+{#                                <input placeholder="Username" type="text" name="username" />#}
+                                {{ form1.username }}
                                 <i class="user icon"></i>
                             </div>
                         </div>
 
                         <div class="two fields">
                             <div class="field">
+                                {{ form1.password.errors }}
                                 <label>Password</label>
                                 <div class="ui left icon input">
-                                    <input placeholder="Password" type="password" name="password1" />
+{#                                    <input placeholder="Password" type="password" name="password1" />#}
+                                    {{ form1.password }}
                                     <i class="lock icon"></i>
                                 </div>
                             </div>
@@ -81,16 +91,18 @@
                         </div>
 
                         <div class="field">
+                            {{ form1.email.errors }}
                             <label>Email</label>
                             <div class="ui left icon input">
-                                <input placeholder="Email" type="email" name="email" />
+{#                                <input placeholder="Email" type="email" name="email" />#}
+                                {{ form1.email }}
                                 <i class="mail icon"></i>
                             </div>
                         </div>
                         <div class="green ui labeled icon submit button">
                             <i class="signup icon"></i>
                             Sign Up
-                        </div> -->
+                        </div>
                     </form>
                 </div>
                 <!-- sign up form end -->
