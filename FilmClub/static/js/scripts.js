@@ -6,99 +6,103 @@
 
 $('.ui.dropdown').dropdown();
 
-$('#registerForm')
-    .form({
-        firstName: {
-            identifier : 'firstName',
-            rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please enter your first name.'
-                }
-            ]
-        },
-        lastName: {
-            identifier : 'lastName',
-            rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please enter your last name.'
-                }
-            ]
-        },
-        date: {
-            identifier : 'date',
-            rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please enter your birthday.'
-                }
-            ]
-        },
-        gender: {
-            identifier : 'gender',
-            rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please select your gender.'
-                }
-            ]
-        },
-        displayName: {
-            identifier : 'displayName',
-            rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please enter a display name.'
-                }
-            ]
-        },
-        username: {
-            identifier : 'username',
-            rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please enter a username.'
-                }
-            ]
-        },
-        password1: {
-            identifier : 'password1',
-            rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please enter a password.'
-                },
-                {
-                    type   : 'length[6]',
-                    prompt : 'Your password must be at least 6 characters.'
-                }
-            ]
-        },
-        password2: {
-            identifier : 'password2',
-            rules: [
-                {
-                    type   : 'match[password1]',
-                    prompt : 'Your passwords don\'t match.'
-                }
-            ]
-        },
-        email: {
-            identifier : 'email',
-            rules: [
-                {
-                    type   : 'empty',
-                    prompt : 'Please enter an email.'
-                },
-                {
-                    type   : 'email',
-                    prompt : 'Please enter a valid email.'
-                }
-            ]
-        }
-    })
-;
+$('#registerForm').form();
+
+//$('#registerForm')
+//    .form({
+//        //inline: true,
+//        //fields: {
+//            first_name: {
+//                identifier: 'first_name',
+//                rules: [
+//                    {
+//                        type: 'empty',
+//                        prompt: 'Please enter your first name.'
+//                    }
+//                ]
+//            },
+//            last_name: {
+//                identifier: 'last_name',
+//                rules: [
+//                    {
+//                        type: 'empty',
+//                        prompt: 'Please enter your last name.'
+//                    }
+//                ]
+//            },
+//            //date: {
+//            //    identifier : 'date',
+//            //    rules: [
+//            //        {
+//            //            type   : 'empty',
+//            //            prompt : 'Please enter your birthday.'
+//            //        }
+//            //    ]
+//            //},
+//            //gender: {
+//            //    identifier : 'gender',
+//            //    rules: [
+//            //        {
+//            //            type   : 'empty',
+//            //            prompt : 'Please select your gender.'
+//            //        }
+//            //    ]
+//            //},
+//            display_name: {
+//                identifier: 'display_name',
+//                rules: [
+//                    {
+//                        type: 'empty',
+//                        prompt: 'Please enter a display name.'
+//                    }
+//                ]
+//            },
+//            username: {
+//                identifier: 'username',
+//                rules: [
+//                    {
+//                        type: 'empty',
+//                        prompt: 'Please enter a username.'
+//                    }
+//                ]
+//            },
+//            password: {
+//                identifier: 'password',
+//                rules: [
+//                    {
+//                        type: 'empty',
+//                        prompt: 'Please enter a password.'
+//                    },
+//                    {
+//                        type: 'length[6]',
+//                        prompt: 'Your password must be at least 6 characters.'
+//                    }
+//                ]
+//            },
+//            password2: {
+//                identifier: 'password2',
+//                rules: [
+//                    {
+//                        type: 'match[password]',
+//                        prompt: 'Your passwords don\'t match.'
+//                    }
+//                ]
+//            },
+//            email: {
+//                identifier: 'email',
+//                rules: [
+//                    {
+//                        type: 'empty',
+//                        prompt: 'Please enter an email.'
+//                    },
+//                    {
+//                        type: 'email',
+//                        prompt: 'Please enter a valid email.'
+//                    }
+//                ]
+//            }
+//        //}
+//    });
 
 
 /* end register.html JS */

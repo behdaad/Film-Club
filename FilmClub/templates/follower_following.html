@@ -5,11 +5,7 @@
     <div class="three wide computer five wide tablet five wide mobile column">
         <div class="ui card">
             <div class="ui medium image">
-                {% if user.has_avatar %}
-                    <img src="{% static 'img/avatar' %}/avatar_{{ user.id }}.jpg" />
-                {% else %}
-                    <img src="{% static 'img/avatar/default.png' %}" />
-                {% endif %}
+                <img src="{{ user.avatar.url }}" />
             </div>
             <div class="content">
                 <a href="/user/{{ user.id }}" class="header">{{ user.user.first_name }} {{ user.user.last_name }}</a>

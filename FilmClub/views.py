@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from captcha.fields import CaptchaField
 
 # Create your views here.
 
@@ -191,6 +192,9 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'password', 'email', 'first_name', 'last_name']
 
 class ExtendedUserForm(forms.ModelForm):
+    captcha = CaptchaField()
+    # password2 = forms.PasswordInput()
+
     class Meta:
         model = ExtendedUser
         widgets = {
@@ -667,3 +671,8 @@ def fetch_notifications(request):
     notifs.sort(key=lambda x: x.date)
     notifs.reverse()
     return notifs
+
+@login_required
+def edit_profile(request):
+    target_user = ExtendedUser.objects.get(user=request.user)
+
