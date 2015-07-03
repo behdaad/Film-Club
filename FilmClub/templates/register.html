@@ -32,23 +32,23 @@
                                 </div>
                             </div>
                         </div>
-                        {#                        <div class="two fields">#}
-                        {#                            <div class="field">#}
-                        {#                                <div class="field">#}
-                        {#                                    <label>Birthday</label>#}
-                        {#                                    <input placeholder="DD/MM/YYYY" type="date" name="date">#}
-                        {#                                    {{ form2.birthday }}#}
-                        {#                                </div>#}
-                        {#                            </div>#}
-                        {#                            <div class="field">#}
-                        {#                                <label>Gender</label>#}
-                        {#                                <select class="ui dropdown" name="gender">#}
-                        {#                                    <option value="">Gender</option>#}
-                        {#                                    <option value="male">Male</option>#}
-                        {#                                    <option value="female">Female</option>#}
-                        {#                                </select>#}
-                        {#                            </div>#}
-                        {#                        </div>#}
+                        <div class="two fields">
+                            <div class="field">
+                                <label for="birthday">Birthday</label>
+                                <div class="ui left icon input">
+                                    <input placeholder="DD/MM/YYYY" id="birthday" type="date" name="birthday">
+                                    <i class="birthday icon"></i>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="gender">Gender</label>
+                                <select id="gender" class="ui dropdown" name="gender">
+                                    <option value="">Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="field">
                             {{ form2.display_name.errors }}
                             <label>Display Name</label>
@@ -98,7 +98,7 @@
                             <label>Avatar</label>
                             <div class="ui left icon input">
                                 {{ form2.avatar }}
-                                <i class="file image outline icon"></i>
+                                <i class="file image icon"></i>
                             </div>
                         </div>
                         <div class="field">

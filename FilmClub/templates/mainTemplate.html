@@ -41,33 +41,31 @@
     </a>
     <div class="ui very wide popup" id="notificationsPopup">
         <div class="ui divided list">
-            {% if notifications %}
-                {% for n in notifications %}
-                    <div class="item">
-                        <img class="ui avatar image" src="{{ n.user.avatar.url }}">
-                        <div class="content">
-                            <a style="display: inline !important;" href="/user/{{ n.user.id }}/" class="header">{{ n.user.display_name }}</a>
-                            <span class="date">{{ n.date }}</span>
-                            {% if n.type == "like" %}
-                                <a href="/post/{{ n.post_id }}/"><div class="description">Liked your post.</div></a>
-                            {% elif n.type == "comment_post" %}
-                                <a href="/post/{{ n.post_id }}/"><div class="description">Commented on your post.</div></a>
-                            {% elif n.type == "comment_comment" %}
-                                <a href="/post/{{ n.post_id }}/"><div class="description">Commented on a post you've commented before.</div></a>
-                            {% elif n.type == "follow" %}
-                                <a href="/post/{{ n.post_id }}/"><div class="description">Started following you.</div></a>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endfor %}
+            {% for n in notifications %}
                 <div class="item">
-                    <a href="/user/{{ logged_in.id }}/notifications/">View all notifications</a>
+                    <img class="ui avatar image" src="{{ n.user.avatar.url }}">
+                    <div class="content">
+                        <a style="display: inline !important;" href="/user/{{ n.user.id }}/" class="header">{{ n.user.display_name }}</a>
+                        <span class="date">{{ n.date }}</span>
+                        {% if n.type == "like" %}
+                            <a href="/post/{{ n.post_id }}/"><div class="description">Liked your post.</div></a>
+                        {% elif n.type == "comment_post" %}
+                            <a href="/post/{{ n.post_id }}/"><div class="description">Commented on your post.</div></a>
+                        {% elif n.type == "comment_comment" %}
+                            <a href="/post/{{ n.post_id }}/"><div class="description">Commented on a post you've commented before.</div></a>
+                        {% elif n.type == "follow" %}
+                            <a href="/post/{{ n.post_id }}/"><div class="description">Started following you.</div></a>
+                        {% endif %}
+                    </div>
                 </div>
-            {% else %}
+            {% empty %}
                 <div class="item">
                     Nothing to show here. Move along.
                 </div>
-            {% endif %}
+            {% endfor %}
+            <div class="item">
+                <a href="/notifications/">View all notifications</a>
+            </div>
         </div>
     </div>
 

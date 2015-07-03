@@ -1,4 +1,4 @@
-import random, datetime
+import random, datetime, time
 
 from .models import ExtendedUser, Movie, Post, Like, Comment, FollowTuple, Notification
 
@@ -226,7 +226,17 @@ def register(request):
 
             new_extended_user = extended_user_form.save(commit=False)
             new_extended_user.user = new_user
-            new_extended_user.avatar = request.FILES['avatar']
+
+            if request.FILES != {}:
+                new_extended_user.avatar = request.FILES['avatar']
+
+            birthday = request.POST['birthday']
+            if validate_date(birthday):
+                new_extended_user.birthday = birthday
+
+            gender = request.POST['gender']
+            if gender != "" and (gender == "male" or gender == "female"):
+                new_extended_user.gender = gender
             new_extended_user.save()
 
             return render(request, 'login.html', {
@@ -345,7 +355,7 @@ def single_post(request, post_id):
         'post': post,
         'movies': suggested_movies(request.user),
         'users': suggested_users(request.user),
-        'logged_in': ExtendedUser.objects.filter(user=request.user)[0],
+        'logged_in': ExtendedUser.objects.get(user=request.user),
         'notifications': fetch_notifications(request)[:5],
     })
 
@@ -688,7 +698,7 @@ def edit_profile(request):
         })
 
     else:
-        print("post")
+        # print("post")
         old_password = request.POST['old_password']
 
         user = authenticate(username=target_user.user.username, password=old_password)
@@ -699,17 +709,12 @@ def edit_profile(request):
             if new_password1 == new_password2 and len(new_password1) >= 6:
                 target_user.user.set_password(new_password1)
 
-        # print("new avatar: ", new_avatar)
-        # print(request.FILES)
-        # print(request.POST)
         if request.FILES != {}:
             new_avatar = request.FILES['avatar']
             target_user.avatar = new_avatar
 
         new_display_name = request.POST['display_name']
-        # print("disp name:", new_display_name)
         if new_display_name != "":
-            # print('heey!')
             target_user.display_name = new_display_name
 
         new_first_name = request.POST['first_name']
@@ -720,9 +725,31 @@ def edit_profile(request):
         if new_last_name != "":
             target_user.user.last_name = new_last_name
 
+        gender = request.POST['gender']
+        if gender != "" and (gender == "male" or gender == "female"):
+            target_user.gender = gender
+
+        birthday = request.POST['birthday']
+        if birthday != "" and validate_date(birthday):
+            target_user.birthday = birthday
+
         target_user.save()
         return redirect('/user/' + str(target_user.id) + '/')
 
 @login_required
 def show_notifications(request):
-    pass
+    return render(request, 'notifications.html', {
+        'title': "Notifications",
+        'notifications': fetch_notifications(request),
+        'movies': suggested_movies(request.user),
+        'users': suggested_users(request.user),
+        'logged_in': ExtendedUser.objects.get(user=request.user),
+    })
+
+def validate_date(date_text):
+    try:
+        datetime.datetime.strptime(date_text, '%Y-%m-%d')
+    except ValueError:
+        return False
+    else:
+        return True

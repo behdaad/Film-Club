@@ -6,103 +6,103 @@
 
 $('.ui.dropdown').dropdown();
 
-$('#registerForm').form();
+// $('#registerForm').form();
 
-//$('#registerForm')
-//    .form({
-//        //inline: true,
-//        //fields: {
-//            first_name: {
-//                identifier: 'first_name',
-//                rules: [
-//                    {
-//                        type: 'empty',
-//                        prompt: 'Please enter your first name.'
-//                    }
-//                ]
-//            },
-//            last_name: {
-//                identifier: 'last_name',
-//                rules: [
-//                    {
-//                        type: 'empty',
-//                        prompt: 'Please enter your last name.'
-//                    }
-//                ]
-//            },
-//            //date: {
-//            //    identifier : 'date',
-//            //    rules: [
-//            //        {
-//            //            type   : 'empty',
-//            //            prompt : 'Please enter your birthday.'
-//            //        }
-//            //    ]
-//            //},
-//            //gender: {
-//            //    identifier : 'gender',
-//            //    rules: [
-//            //        {
-//            //            type   : 'empty',
-//            //            prompt : 'Please select your gender.'
-//            //        }
-//            //    ]
-//            //},
-//            display_name: {
-//                identifier: 'display_name',
-//                rules: [
-//                    {
-//                        type: 'empty',
-//                        prompt: 'Please enter a display name.'
-//                    }
-//                ]
-//            },
-//            username: {
-//                identifier: 'username',
-//                rules: [
-//                    {
-//                        type: 'empty',
-//                        prompt: 'Please enter a username.'
-//                    }
-//                ]
-//            },
-//            password: {
-//                identifier: 'password',
-//                rules: [
-//                    {
-//                        type: 'empty',
-//                        prompt: 'Please enter a password.'
-//                    },
-//                    {
-//                        type: 'length[6]',
-//                        prompt: 'Your password must be at least 6 characters.'
-//                    }
-//                ]
-//            },
-//            password2: {
-//                identifier: 'password2',
-//                rules: [
-//                    {
-//                        type: 'match[password]',
-//                        prompt: 'Your passwords don\'t match.'
-//                    }
-//                ]
-//            },
-//            email: {
-//                identifier: 'email',
-//                rules: [
-//                    {
-//                        type: 'empty',
-//                        prompt: 'Please enter an email.'
-//                    },
-//                    {
-//                        type: 'email',
-//                        prompt: 'Please enter a valid email.'
-//                    }
-//                ]
-//            }
-//        //}
-//    });
+$('#registerForm')
+    .form({
+        //inline: true,
+        //fields: {
+            first_name: {
+                identifier: 'first_name',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter your first name.'
+                    }
+                ]
+            },
+            last_name: {
+                identifier: 'last_name',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter your last name.'
+                    }
+                ]
+            },
+            birthday: {
+                identifier : 'birthday',
+                rules: [
+                    {
+                        type   : 'empty',
+                        prompt : 'Please enter your birthday.'
+                    }
+                ]
+            },
+            gender: {
+                identifier : 'gender',
+                rules: [
+                    {
+                        type   : 'empty',
+                        prompt : 'Please select your gender.'
+                    }
+                ]
+            },
+            display_name: {
+                identifier: 'display_name',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a display name.'
+                    }
+                ]
+            },
+            username: {
+                identifier: 'username',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a username.'
+                    }
+                ]
+            },
+            password: {
+                identifier: 'password',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a password.'
+                    },
+                    {
+                        type: 'length[6]',
+                        prompt: 'Your password must be at least 6 characters.'
+                    }
+                ]
+            },
+            password2: {
+                identifier: 'password2',
+                rules: [
+                    {
+                        type: 'match[password]',
+                        prompt: 'Your passwords don\'t match.'
+                    }
+                ]
+            },
+            email: {
+                identifier: 'email',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter an email.'
+                    },
+                    {
+                        type: 'email',
+                        prompt: 'Please enter a valid email.'
+                    }
+                ]
+            }
+        //}
+    });
 
 
 /* end register.html JS */
@@ -152,11 +152,11 @@ $('#notificationsItem').popup({
     transition: 'fade down'
 });
 
-$('#closeChat').on("click", function(){
-    $('#chatSegment').hide();
-    chatOpen = false;
-    $('#chatHeader').text("");
-});
+//$('#closeChat').on("click", function(){
+//    $('#chatSegment').hide();
+//    chatOpen = false;
+//    $('#chatHeader').text("");
+//});
 
 /* end main JS */
 
@@ -169,45 +169,45 @@ $('#searchIcon').click(
     }
 );
 
-var content = [
-    {
-        title: 'Steve Jobs',
-        description: 'User'
-    },
-    {
-        title: 'Steve Jobs',
-        description: 'Movie'
-    },
-    {
-        title: 'Inside Job',
-        description: 'Movie'
-    },
-    {
-        title: 'The Italian Job',
-        description: 'Movie'
-    },
-    {
-        title: 'Enter the Matrix',
-        description: 'Movie'
-    },
-    {
-        title: 'Matrix Reloaded',
-        description: 'Movie'
-    },
-    {
-        title: 'Matrix Revolutions',
-        description: 'Movie'
-    },
-    {
-        title: 'Steven Wilson',
-        description: 'User'
-    }
-];
+//var content = [
+//    {
+//        title: 'Steve Jobs',
+//        description: 'User'
+//    },
+//    {
+//        title: 'Steve Jobs',
+//        description: 'Movie'
+//    },
+//    {
+//        title: 'Inside Job',
+//        description: 'Movie'
+//    },
+//    {
+//        title: 'The Italian Job',
+//        description: 'Movie'
+//    },
+//    {
+//        title: 'Enter the Matrix',
+//        description: 'Movie'
+//    },
+//    {
+//        title: 'Matrix Reloaded',
+//        description: 'Movie'
+//    },
+//    {
+//        title: 'Matrix Revolutions',
+//        description: 'Movie'
+//    },
+//    {
+//        title: 'Steven Wilson',
+//        description: 'User'
+//    }
+//];
 
 $('.ui.search').search(
     {
-        source: content,
-        searchFields: [ 'title' ],
+        //source: content,
+        //searchFields: [ 'title' ],
         transition: 'fade down'
     }
 );
@@ -215,47 +215,45 @@ $('.ui.search').search(
 
 $('.menu .item').tab();
 
-
-
 /* end search JS */
 
 /* chat JS */
 
-var hell;
-var chatOpen = false;
-$('.chat').on("click", function(){
-    if (!chatOpen)
-    {
-        $('#chatSegment').show();
-        hell = $(this);
-        var name = $(this).children()[2].children[0].textContent;
-        $('#chatHeader').append(name);
-        chatOpen = true;
-        $('#chatSegment').append(
-            '<div class="ui message">\
-            Hello! You there?\
-          </div>'
-        );
-        $('#chatSegment').append(
-            '<div class="ui blue message">\
-            Well yes! How are you man?\
-          </div>'
-        );
-
-        $('#chatSegment').append(
-            '<form class="ui reply form commentForm">\
-            <div class="field">\
-              <div class="ui action input">\
-                <input type="text">\
-                <button class="ui small blue icon button commentButton" id="commentButton3">\
-                  <i class="comment outline icon"></i>\
-                </button>\
-              </div>\
-            </div>\
-          </form>'
-        );
-    }
-});
+//var hell;
+//var chatOpen = false;
+//$('.chat').on("click", function(){
+//    if (!chatOpen)
+//    {
+//        $('#chatSegment').show();
+//        hell = $(this);
+//        var name = $(this).children()[2].children[0].textContent;
+//        $('#chatHeader').append(name);
+//        chatOpen = true;
+//        $('#chatSegment').append(
+//            '<div class="ui message">\
+//            Hello! You there?\
+//          </div>'
+//        );
+//        $('#chatSegment').append(
+//            '<div class="ui blue message">\
+//            Well yes! How are you man?\
+//          </div>'
+//        );
+//
+//        $('#chatSegment').append(
+//            '<form class="ui reply form commentForm">\
+//            <div class="field">\
+//              <div class="ui action input">\
+//                <input type="text">\
+//                <button class="ui small blue icon button commentButton" id="commentButton3">\
+//                  <i class="comment outline icon"></i>\
+//                </button>\
+//              </div>\
+//            </div>\
+//          </form>'
+//        );
+//    }
+//});
 
 /* end chat JS */
 

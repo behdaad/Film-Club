@@ -8,45 +8,69 @@
             <div class="field">
                 <label for="first_name">First Name</label>
                 <div class="ui left icon input">
-                    <input id="first_name" type="text" name="first_name">
+                    <input placeholder="First Name" id="first_name" type="text" name="first_name">
+                    <i class="write icon"></i>
                 </div>
             </div>
             <div class="field">
                 <label for="last_name">Last Name</label>
                 <div class="ui left icon input">
-                    <input id="last_name" type="text" name="last_name">
+                    <input placeholder="Last Name" id="last_name" type="text" name="last_name">
+                    <i class="write icon"></i>
                 </div>
             </div>
             <div class="field">
                 <label for="display_name">Display Name</label>
                 <div class="ui left icon input">
-                    <input id="display_name" type="text" name="display_name">
+                    <input placeholder="Display Name" id="display_name" type="text" name="display_name">
+                    <i class="user icon"></i>
                 </div>
             </div>
             <div class="field">
                 <label for="old_password">Old Password</label>
                 <div class="ui left icon input">
-                    <input id="old_password" type="password" name="old_password">
+                    <input placeholder="Old Password" id="old_password" type="password" name="old_password">
+                    <i class="lock icon"></i>
                 </div>
             </div>
             <div class="two fields">
                 <div class="field">
                     <label for="new_password1">New Password</label>
                     <div class="ui left icon input">
-                        <input id="new_password1" type="password" name="new_password1">
+                        <input placeholder="New Password" id="new_password1" type="password" name="new_password1">
+                        <i class="lock icon"></i>
                     </div>
                 </div>
                 <div class="field">
                     <label for="new_password2">Repeat Password</label>
                     <div class="ui left icon input">
-                        <input id="new_password2" type="password" name="new_password2">
+                        <input placeholder="Repeat Password" id="new_password2" type="password" name="new_password2">
+                        <i class="lock icon"></i>
                     </div>
                 </div>
             </div>
             <div class="field">
                 <label for="avatar">Avatar</label>
                 <div class="ui left icon input">
-                    <input id="avatar" type="file" name="avatar">
+                    <input placeholder="Avatar" id="avatar" type="file" name="avatar">
+                    <i class="file image icon"></i>
+                </div>
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label for="birthday">Birthday</label>
+                    <div class="ui left icon input">
+                        <input placeholder="DD/MM/YYYY" id="birthday" type="date" name="birthday">
+                        <i class="birthday icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="gender">Gender</label>
+                    <select id="gender" class="ui dropdown" name="gender">
+                        <option value="">Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
                 </div>
             </div>
             <input type="submit" class="ui submit button">
