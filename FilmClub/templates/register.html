@@ -10,7 +10,7 @@
             <div class="seven wide column vertically padded">
                 <!-- sign up form -->
                 <div class="ui small right aligned">
-                    <form class="ui form segment" action="" method="post" id="registerForm">
+                    <form class="ui form segment" action="" method="post" id="registerForm" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="ui error message"></div>
                         <div class="two fields">
@@ -94,9 +94,19 @@
                             </div>
                         </div>
                         <div class="field">
+                            {{ form2.avatar.errors }}
+                            <label>Avatar</label>
+                            <div class="ui left icon input">
+                                {{ form2.avatar }}
+                                <i class="file image outline icon"></i>
+                            </div>
+                        </div>
+                        <div class="field">
                             {{ form2.captcha.errors }}
                             <label>Captcha</label>
-                            {{ form2.captcha }}
+                            <div class="ui input">
+                                {{ form2.captcha }}
+                            </div>
                         </div>
                         <div class="green ui labeled icon submit button">
                             <i class="signup icon"></i>

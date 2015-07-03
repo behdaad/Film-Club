@@ -88,7 +88,7 @@
                 <div class="results" style="left: -11px;" id="searchResults" style="z-index: 999;"></div>
             </div>
         </div>
-        <a class="item" href="/logout">
+        <a class="item" href="/logout/">
             <i class="sign out icon"></i> Logout
         </a>
     </div>
@@ -121,7 +121,7 @@
                     {% for movie in movies %}
                         <div class="item">
                             <a class="ui inline link" href="/movie/{{ movie.id }}">
-                                <img class="ui tiny left floated rounded bordered image" src="{{ movie.poster.url }}" alt="{{ movie.name }}" style="margin-bottom:6%;">
+                                <img class="ui tiny left floated image" src="{{ movie.poster.url }}" alt="{{ movie.name }}" style="margin-bottom:6%;">
                             </a>
                             <div class="content">
                                 <a class="ui medium header" href="/movie/{{ movie.id }}">{{ movie.name }}</a>

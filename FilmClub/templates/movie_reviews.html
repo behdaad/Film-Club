@@ -73,7 +73,7 @@
                             </div>
                             <h4 class="ui dividing header"><span id="comments_count_{{ post.id }}">{{ post.comments.count }}</span> Comments</h4>
                             <div class="ui comments" id="comments_section_{{ post.id }}">
-                                {% for comment in post.comments.all %}
+                                {% for comment in post.comments.all|slice:":5" %}
                                     <div class="comment">
                                         <a href="/user/{{ comment.user.id }}" class="avatar">
                                             <img src="{{ comment.user.avatar.url }}">
@@ -89,6 +89,9 @@
                                         </div>
                                     </div>
                                 {% endfor %}
+                                {% if post.comments.all|length > 5 %}
+                                    <a href="/post/{{ post.id }}/">View all comments...</a>
+                                {% endif %}
                             </div>
                         </div>
                         <!-- comments segment end -->
@@ -120,7 +123,7 @@
                 <div class="ui small header" style="margin-top: 8px !important;">Your Rate: <span class="text" id="rating"></span>/10</div>
                 <div class="extra">
                     <div class="ui small image">
-                        <img src="{% static "img/posters" %}/{{ movie.poster }}">
+                        <img src="{{ movie.poster.url }}">
                     </div>
                 </div>
             </div>

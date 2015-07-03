@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^search/$', 'FilmClub.views.search'),
     url(r'^timeline/(?P<page>\d+)/$', 'FilmClub.views.main'),
     url(r'^edit/$', 'FilmClub.views.edit_profile'),
+    url(r'^notifications/$', 'FilmClub.views.show_notifications'),
 
     url(r'^user/(?P<user_id>\d+)/$', 'FilmClub.views.show_user'),
     url(r'^user/(?P<user_id>\d+)/(?P<page>\d+)/$', 'FilmClub.views.show_user'),
@@ -47,7 +48,9 @@ urlpatterns = [
     url(r'^post/(?P<post_id>\d+)/comment/$', 'FilmClub.views.comment_on_post'),
 
     url(r'^captcha/', include('captcha.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 # urlpatterns += patterns('',

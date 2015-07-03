@@ -6,7 +6,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from captcha.fields import CaptchaField
@@ -217,7 +217,7 @@ def register(request):
         })
     else:  # POST
         user_form = UserForm(request.POST)
-        extended_user_form = ExtendedUserForm(request.POST)
+        extended_user_form = ExtendedUserForm(request.POST, request.FILES)
 
         if user_form.is_valid() and extended_user_form.is_valid() and user_form.cleaned_data.get('password') == request.POST['password2']:
             new_user = user_form.save(commit=False)
@@ -226,6 +226,7 @@ def register(request):
 
             new_extended_user = extended_user_form.save(commit=False)
             new_extended_user.user = new_user
+            new_extended_user.avatar = request.FILES['avatar']
             new_extended_user.save()
 
             return render(request, 'login.html', {
@@ -675,4 +676,53 @@ def fetch_notifications(request):
 @login_required
 def edit_profile(request):
     target_user = ExtendedUser.objects.get(user=request.user)
+    if request.method == 'GET':
+        # edit_user_form = EditUserForm()
+        # edit_extended_user_form = EditExtendedUserForm()
+        return render(request, 'edit_profile.html', {
+            'title': "Edit Profile",
+            'movies': suggested_movies(request.user),
+            'users': suggested_users(request.user),
+            'logged_in': target_user,
+            'notifications': fetch_notifications(request)[:5],
+        })
 
+    else:
+        print("post")
+        old_password = request.POST['old_password']
+
+        user = authenticate(username=target_user.user.username, password=old_password)
+        if user and user.is_active:
+            new_password1 = request.POST['new_password1']
+            new_password2 = request.POST['new_password2']
+
+            if new_password1 == new_password2 and len(new_password1) >= 6:
+                target_user.user.set_password(new_password1)
+
+        # print("new avatar: ", new_avatar)
+        # print(request.FILES)
+        # print(request.POST)
+        if request.FILES != {}:
+            new_avatar = request.FILES['avatar']
+            target_user.avatar = new_avatar
+
+        new_display_name = request.POST['display_name']
+        # print("disp name:", new_display_name)
+        if new_display_name != "":
+            # print('heey!')
+            target_user.display_name = new_display_name
+
+        new_first_name = request.POST['first_name']
+        if new_first_name != "":
+            target_user.user.first_name = new_first_name
+
+        new_last_name = request.POST['last_name']
+        if new_last_name != "":
+            target_user.user.last_name = new_last_name
+
+        target_user.save()
+        return redirect('/user/' + str(target_user.id) + '/')
+
+@login_required
+def show_notifications(request):
+    pass

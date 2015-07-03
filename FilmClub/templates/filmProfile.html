@@ -71,7 +71,7 @@
                 <div class="ui small header" style="margin-top: 8px !important;">Your Rate: <span class="text" id="rating"></span>/10</div>
                 <div class="extra">
                     <div class="ui small image">
-                        <img src="{% static "img/posters" %}/{{ movie.poster }}">
+                        <img src="{{ movie.poster.url }}">
                     </div>
                 </div>
             </div>

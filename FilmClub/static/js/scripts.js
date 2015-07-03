@@ -541,3 +541,7 @@ function comment_input(event, post_id, user_id, display_name)
 }
 
 /* comment JS end */
+
+/* edit profile JS */
+$('#edit_profile_form').form();
+/* edit profile JS end */
